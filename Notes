@@ -1,0 +1,48 @@
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class TestBuddyApp {
+    private JFrame frame;
+    private JTextArea logArea;
+    private JButton startButton;
+    private boolean isRecording = false;
+
+    public TestBuddyApp() {
+        frame = new JFrame("TestBuddy App");
+        frame.setSize(500, 400);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLayout(null);
+
+        logArea = new JTextArea();
+        logArea.setBounds(20, 20, 450, 250);
+        frame.add(logArea);
+
+        startButton = new JButton("Start Recording");
+        startButton.setBounds(20, 300, 150, 30);
+        frame.add(startButton);
+
+        startButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (!isRecording) {
+                    isRecording = true;
+                    startButton.setText("Stop Recording");
+                    logArea.append("Recording started...\n");
+                    // Start capturing actions
+                } else {
+                    isRecording = false;
+                    startButton.setText("Start Recording");
+                    logArea.append("Recording stopped.\n");
+                    // Stop capturing actions
+                }
+            }
+        });
+
+        frame.setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        new TestBuddyApp();
+    }
+}
