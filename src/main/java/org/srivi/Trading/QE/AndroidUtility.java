@@ -1,68 +1,130 @@
 package org.srivi.Trading.QE;
 
-
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 
-public class AndroidUtility {
-    private JFrame androidFrame;
+public class AndroidUtility extends JFrame {
+
+    private JFrame mainAppFrame;
     private JTextField fileNameField;
     private JTextField fileLocationField;
     private JLabel savedLocationLabel;
+    private JLabel deviceStatusLabel;
 
     public AndroidUtility() {
-        // Initialize the Android Utility frame
-        androidFrame = new JFrame("Android Utility");
-        androidFrame.setSize(500, 400);
-        androidFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        androidFrame.setLayout(null);
+        setTitle("Android Utility");
+        setSize(400, 300);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLayout(null);
+        // Set the custom font
+        Font interFont = FontUtil.getInterFont(12f);
 
-        JLabel utilityLabel = new JLabel("Android Utility Options:");
-        utilityLabel.setBounds(120, 20, 160, 30);
-        androidFrame.add(utilityLabel);
+        // Back button to return to main app
+        JButton backButton = new JButton("Back");
+        backButton.setBounds(10, 10, 80, 30);
+        backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                goBackToMainApp();
+            }
+        });
+        add(backButton);
 
-        // Get list of connected devices
+        // Label for device connection status
+        deviceStatusLabel = new JLabel("Device Connected: Checking...");
+        deviceStatusLabel.setBounds(50, 50, 300, 30);
+        add(deviceStatusLabel);
+
+        // Button for Take Screenshot option
+        JButton screenshotButton = new JButton("Take Screenshot");
+        screenshotButton.setBounds(50, 90, 200, 30);
+        screenshotButton.setEnabled(false); // Disable for now, enable when the function is implemented
+        add(screenshotButton);
+
+        // Button for Screen Recording option
+        JButton screenRecordingButton = new JButton("Screen Recording");
+        screenRecordingButton.setBounds(50, 140, 200, 30);
+        screenRecordingButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                openScreenRecordingView();
+            }
+        });
+        add(screenRecordingButton);
+
+        // Update the device status
+        updateDeviceStatus();
+
+        setVisible(true);
+    }
+
+    // Method to update the device connection status
+    public void updateDeviceStatus() {
         List<String> devices = ADBHelper.getConnectedDevices();
-        JLabel deviceLabel = new JLabel(devices.isEmpty() ? "No devices connected." : "Connected Devices: " + String.join(", ", devices));
-        deviceLabel.setBounds(20, 60, 460, 30);
-        androidFrame.add(deviceLabel);
+        String statusText = devices.isEmpty() ? "No devices connected." : "Connected Devices: " + String.join(", ", devices);
+        deviceStatusLabel.setText(statusText);
+    }
+
+    // Method to open Screen Recording View
+    private void openScreenRecordingView() {
+        JFrame recordingFrame = new JFrame("Screen Recording");
+        recordingFrame.setSize(500, 350);
+        recordingFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        recordingFrame.setLayout(null);
+        // Set the custom font
+        Font interFont = FontUtil.getInterFont(12f);
+
+        // Back button to return to AndroidUtility view
+        JButton backButton = new JButton("Back");
+        backButton.setBounds(10, 10, 80, 30);
+        backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                recordingFrame.dispose();
+                setVisible(true);
+            }
+        });
+        recordingFrame.add(backButton);
 
         // File Name Label and Field
         JLabel fileNameLabel = new JLabel("File Name:");
         fileNameLabel.setBounds(50, 120, 100, 30);
-        androidFrame.add(fileNameLabel);
+        recordingFrame.add(fileNameLabel);
 
         fileNameField = new JTextField("android_screen_record");
         fileNameField.setBounds(150, 120, 200, 30);
-        androidFrame.add(fileNameField);
+        recordingFrame.add(fileNameField);
 
         // File Location Label and Field
         JLabel fileLocationLabel = new JLabel("File Location:");
         fileLocationLabel.setBounds(50, 170, 100, 30);
-        androidFrame.add(fileLocationLabel);
+        recordingFrame.add(fileLocationLabel);
 
         fileLocationField = new JTextField();
         fileLocationField.setBounds(150, 170, 200, 30);
-        androidFrame.add(fileLocationField);
+        recordingFrame.add(fileLocationField);
 
         JButton browseButton = new JButton("Browse");
         browseButton.setBounds(360, 170, 80, 30);
-        androidFrame.add(browseButton);
+        recordingFrame.add(browseButton);
         browseButton.addActionListener(e -> FileChooserUtil.selectFileLocation(fileLocationField));
 
         // Start and Stop Recording Buttons
         JButton startRecordButton = new JButton("Start Screen Recording");
         startRecordButton.setBounds(50, 230, 150, 30);
-        androidFrame.add(startRecordButton);
+        recordingFrame.add(startRecordButton);
 
         JButton stopRecordButton = new JButton("Stop Screen Recording");
         stopRecordButton.setBounds(220, 230, 150, 30);
         stopRecordButton.setEnabled(false);
-        androidFrame.add(stopRecordButton);
+        recordingFrame.add(stopRecordButton);
 
         savedLocationLabel = new JLabel("");
         savedLocationLabel.setBounds(20, 280, 460, 30);
-        androidFrame.add(savedLocationLabel);
+        recordingFrame.add(savedLocationLabel);
 
         startRecordButton.addActionListener(e -> {
             ADBHelper.startAndroidScreenRecording(fileNameField.getText());
@@ -76,6 +138,19 @@ public class AndroidUtility {
             stopRecordButton.setEnabled(false);
         });
 
-        androidFrame.setVisible(true);
+        recordingFrame.setVisible(true);
+    }
+
+    // Method to set the main app frame
+    public void setMainAppFrame(JFrame mainAppFrame) {
+        this.mainAppFrame = mainAppFrame;
+    }
+
+    // Method to go back to the main app
+    private void goBackToMainApp() {
+        if (mainAppFrame != null) {
+            mainAppFrame.setVisible(true);
+        }
+        dispose();
     }
 }
