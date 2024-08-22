@@ -10,14 +10,14 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-public class QEUtilityApp {
+public class BackupQECode {
     private JFrame frame;
     private Process screenRecordProcess;
     private JTextField fileNameField;
     private JTextField fileLocationField;
     private JLabel savedLocationLabel;
 
-    public QEUtilityApp() {
+    public BackupQECode() {
         // Initialize the main frame
         frame = new JFrame("QE Utility App");
         frame.setSize(400, 200);
@@ -206,7 +206,7 @@ public class QEUtilityApp {
     }
 
     private void stopAndroidScreenRecording(String fileName, String fileLocation) {
-         try {
+        try {
             if (screenRecordProcess != null) {
                 screenRecordProcess.destroy();
 
@@ -250,13 +250,13 @@ public class QEUtilityApp {
             }
         }
 
-         catch (IOException | InterruptedException ex) {
+        catch (IOException | InterruptedException ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(null, "Failed to stop screen recording: " + ex.getMessage());
         }
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new QEUtilityApp());
+        SwingUtilities.invokeLater(() -> new org.srivi.Trading.QE.QEUtilityApp());
     }
 }
