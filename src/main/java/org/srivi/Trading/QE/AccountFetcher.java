@@ -20,10 +20,15 @@ public class AccountFetcher {
             boolean match = true;
 
             for (Map.Entry<String, String> criterion : criteria.entrySet()) {
-                int index = getCriteriaIndex(criterion.getKey());
-                if (index != -1 && !accountDetails[index].equalsIgnoreCase(criterion.getValue())) {
-                    match = false;
-                    break;
+                String criterionKey = criterion.getKey();
+                String criterionValue = criterion.getValue();
+
+                if (!"Select".equals(criterionValue)) {
+                    int index = getCriteriaIndex(criterionKey);
+                    if (index != -1 && !accountDetails[index].equalsIgnoreCase(criterionValue)) {
+                        match = false;
+                        break;
+                    }
                 }
             }
 

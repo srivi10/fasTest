@@ -19,6 +19,8 @@ public class ExcelUtil {
 
             for (Row row : sheet) {
                 if (row.getRowNum() == 0) continue; // Skip header row
+
+                // Read cell values
                 String accountSet = row.getCell(0).getStringCellValue();
                 String username = row.getCell(1).getStringCellValue();
                 String password = row.getCell(2).getStringCellValue();
@@ -28,6 +30,7 @@ public class ExcelUtil {
                 String offers = row.getCell(6).getStringCellValue();
                 String paymentPlan = row.getCell(7).getStringCellValue();
 
+                // Store in map with account set as key
                 accounts.put(accountSet, new String[]{username, password, holder, type, transfer, offers, paymentPlan});
             }
         } catch (IOException e) {
@@ -37,4 +40,3 @@ public class ExcelUtil {
         return accounts;
     }
 }
-

@@ -57,9 +57,9 @@ public class AccountSelectionGUI extends JFrame {
 
         accountHolderComboBox = new JComboBox<>(new String[]{"Single", "Multi"});
         accountTypeComboBox = new JComboBox<>(new String[]{"PCH", "Au"});
-        transferComboBox = new JComboBox<>(new String[]{"Eligible", "Ineligible"});
-        offersComboBox = new JComboBox<>(new String[]{"Eligible", "Ineligible"});
-        paymentPlanComboBox = new JComboBox<>(new String[]{"Eligible", "Ineligible"});
+        transferComboBox = new JComboBox<>(new String[]{"Select", "Eligible", "Ineligible"});
+        offersComboBox = new JComboBox<>(new String[]{"Select", "Eligible", "Ineligible"});
+        paymentPlanComboBox = new JComboBox<>(new String[]{"Select", "Eligible", "Ineligible"});
 
         submitButton = new JButton("Submit");
         resetButton = new JButton("Reset");
@@ -147,11 +147,21 @@ public class AccountSelectionGUI extends JFrame {
         AccountFetcher fetcher = new AccountFetcher(accounts);
 
         Map<String, String> criteria = new HashMap<>();
-        criteria.put("Account Holder", (String) accountHolderComboBox.getSelectedItem());
-        criteria.put("Account Type", (String) accountTypeComboBox.getSelectedItem());
-        criteria.put("Transfer", (String) transferComboBox.getSelectedItem());
-        criteria.put("Offers", (String) offersComboBox.getSelectedItem());
-        criteria.put("Payment Plan", (String) paymentPlanComboBox.getSelectedItem());
+        if (!"Select".equals(accountHolderComboBox.getSelectedItem())) {
+            criteria.put("Account Holder", (String) accountHolderComboBox.getSelectedItem());
+        }
+        if (!"Select".equals(accountTypeComboBox.getSelectedItem())) {
+            criteria.put("Account Type", (String) accountTypeComboBox.getSelectedItem());
+        }
+        if (!"Select".equals(transferComboBox.getSelectedItem())) {
+            criteria.put("Transfer", (String) transferComboBox.getSelectedItem());
+        }
+        if (!"Select".equals(offersComboBox.getSelectedItem())) {
+            criteria.put("Offers", (String) offersComboBox.getSelectedItem());
+        }
+        if (!"Select".equals(paymentPlanComboBox.getSelectedItem())) {
+            criteria.put("Payment Plan", (String) paymentPlanComboBox.getSelectedItem());
+        }
 
         List<String[]> matchedAccounts = fetcher.fetchAccounts(criteria);
 
@@ -190,27 +200,18 @@ public class AccountSelectionGUI extends JFrame {
         transferComboBox.setSelectedIndex(0);
         offersComboBox.setSelectedIndex(0);
         paymentPlanComboBox.setSelectedIndex(0);
-
         usernameField.setText("");
         passwordField.setText("");
         clearTextFieldsAndCheckBoxes();
-        errorTextArea.setText(""); // Clear error message
+        errorTextArea.setText("");
     }
 
-    // Method to go back to the main application frame
     private void goBackToMainApp() {
-        if (mainAppFrame != null) {
-            mainAppFrame.setVisible(true);
-        }
-        dispose();
+        this.dispose();
+        mainAppFrame.setVisible(true);
     }
 
     public static void main(String[] args) {
-        JFrame mainAppFrame = new JFrame("Main Application");
-        mainAppFrame.setSize(400, 400);
-        mainAppFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        mainAppFrame.setVisible(true);
-
-        SwingUtilities.invokeLater(() -> new AccountSelectionGUI(mainAppFrame));
+        SwingUtilities.invokeLater(() -> new AccountSelectionGUI(null));
     }
 }
