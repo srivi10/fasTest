@@ -2,14 +2,19 @@ package org.srivi.Trading;
 
 import org.srivi.Trading.QE.AccountFetcher;
 import org.srivi.Trading.QE.ExcelUtil;
+import org.srivi.Trading.QE.FontUtil;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class AccountSelectionGUI {
+public class AccountSelectionGUI extends JFrame {
+
+    private JFrame mainAppFrame;
     private JComboBox<String> accountHolderComboBox;
     private JComboBox<String> accountTypeComboBox;
     private JComboBox<String> transferComboBox;
@@ -17,6 +22,7 @@ public class AccountSelectionGUI {
     private JComboBox<String> paymentPlanComboBox;
     private JButton submitButton;
     private JButton resetButton;
+    private JButton backButton; // Back button
     private JTextField usernameField;
     private JTextField passwordField;
     private JTextField accountHolderField;
@@ -29,11 +35,25 @@ public class AccountSelectionGUI {
 
     private boolean isLoading = false;
 
-    public AccountSelectionGUI() {
-        JFrame frame = new JFrame("Account Selection");
-        frame.setSize(700, 700);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLayout(null);
+    public AccountSelectionGUI(JFrame mainAppFrame) {
+        this.mainAppFrame = mainAppFrame;
+        setupUI();
+    }
+
+    private void setupUI() {
+        setTitle("Account Selection");
+        setSize(700, 700);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLayout(null);
+
+        // Set the custom font
+        Font interFont = FontUtil.getInterFont(12f);
+
+        backButton = new JButton("Back");
+        backButton.setBounds(10, 10, 80, 30);
+        backButton.setFont(interFont);
+        backButton.addActionListener(e -> goBackToMainApp());
+        add(backButton);
 
         accountHolderComboBox = new JComboBox<>(new String[]{"Single", "Multi"});
         accountTypeComboBox = new JComboBox<>(new String[]{"PCH", "Au"});
@@ -63,38 +83,38 @@ public class AccountSelectionGUI {
         errorTextArea.setWrapStyleWord(true);
 
         // Add components to frame
-        frame.add(new JLabel("Account Holder:")).setBounds(20, 20, 120, 30);
-        frame.add(accountHolderComboBox).setBounds(150, 20, 150, 30);
-        frame.add(new JLabel("Account Type:")).setBounds(20, 60, 120, 30);
-        frame.add(accountTypeComboBox).setBounds(150, 60, 150, 30);
-        frame.add(new JLabel("Transfer:")).setBounds(20, 100, 120, 30);
-        frame.add(transferComboBox).setBounds(150, 100, 150, 30);
-        frame.add(new JLabel("Offers:")).setBounds(20, 140, 120, 30);
-        frame.add(offersComboBox).setBounds(150, 140, 150, 30);
-        frame.add(new JLabel("Payment Plan:")).setBounds(20, 180, 120, 30);
-        frame.add(paymentPlanComboBox).setBounds(150, 180, 150, 30);
+        add(new JLabel("Account Holder:")).setBounds(20, 50, 120, 30);
+        add(accountHolderComboBox).setBounds(150, 50, 150, 30);
+        add(new JLabel("Account Type:")).setBounds(20, 90, 120, 30);
+        add(accountTypeComboBox).setBounds(150, 90, 150, 30);
+        add(new JLabel("Transfer:")).setBounds(20, 130, 120, 30);
+        add(transferComboBox).setBounds(150, 130, 150, 30);
+        add(new JLabel("Offers:")).setBounds(20, 170, 120, 30);
+        add(offersComboBox).setBounds(150, 170, 150, 30);
+        add(new JLabel("Payment Plan:")).setBounds(20, 210, 120, 30);
+        add(paymentPlanComboBox).setBounds(150, 210, 150, 30);
 
-        frame.add(submitButton).setBounds(50, 230, 100, 30);
-        frame.add(resetButton).setBounds(170, 230, 100, 30);
+        add(submitButton).setBounds(50, 260, 100, 30);
+        add(resetButton).setBounds(170, 260, 100, 30);
 
-        frame.add(new JLabel("Username:")).setBounds(20, 270, 120, 30);
-        frame.add(usernameField).setBounds(150, 270, 200, 30);
-        frame.add(new JLabel("Password:")).setBounds(20, 310, 120, 30);
-        frame.add(passwordField).setBounds(150, 310, 200, 30);
+        add(new JLabel("Username:")).setBounds(20, 300, 120, 30);
+        add(usernameField).setBounds(150, 300, 200, 30);
+        add(new JLabel("Password:")).setBounds(20, 340, 120, 30);
+        add(passwordField).setBounds(150, 340, 200, 30);
 
-        frame.add(new JLabel("Account Holder")).setBounds(20, 350, 120, 30);
-        frame.add(accountHolderField).setBounds(150, 350, 200, 30);
-        frame.add(new JLabel("Account Type")).setBounds(20, 390, 120, 30);
-        frame.add(accountTypeField).setBounds(150, 390, 200, 30);
-        frame.add(new JLabel("Transfer")).setBounds(20, 430, 120, 30);
-        frame.add(transferCheckBox).setBounds(150, 430, 30, 30);
-        frame.add(new JLabel("Offers")).setBounds(200, 430, 120, 30);
-        frame.add(offersCheckBox).setBounds(320, 430, 30, 30);
-        frame.add(new JLabel("Payment Plan")).setBounds(370, 430, 120, 30);
-        frame.add(paymentPlanCheckBox).setBounds(490, 430, 30, 30);
+        add(new JLabel("Account Holder")).setBounds(20, 380, 120, 30);
+        add(accountHolderField).setBounds(150, 380, 200, 30);
+        add(new JLabel("Account Type")).setBounds(20, 420, 120, 30);
+        add(accountTypeField).setBounds(150, 420, 200, 30);
+        add(new JLabel("Transfer")).setBounds(20, 460, 120, 30);
+        add(transferCheckBox).setBounds(150, 460, 30, 30);
+        add(new JLabel("Offers")).setBounds(200, 460, 120, 30);
+        add(offersCheckBox).setBounds(320, 460, 30, 30);
+        add(new JLabel("Payment Plan")).setBounds(370, 460, 120, 30);
+        add(paymentPlanCheckBox).setBounds(490, 460, 30, 30);
 
-        frame.add(loadingLabel).setBounds(450, 270, 100, 30);
-        frame.add(errorTextArea).setBounds(20, 470, 380, 40);
+        add(loadingLabel).setBounds(450, 300, 100, 30);
+        add(errorTextArea).setBounds(20, 500, 380, 40);
 
         submitButton.addActionListener(e -> {
             if (isLoading) return;  // Prevent action if loading is already active
@@ -116,7 +136,7 @@ public class AccountSelectionGUI {
 
         resetButton.addActionListener(e -> resetFields());
 
-        frame.setVisible(true);
+        setVisible(true);
     }
 
     private void fetchAndDisplayAccounts() {
@@ -177,7 +197,20 @@ public class AccountSelectionGUI {
         errorTextArea.setText(""); // Clear error message
     }
 
+    // Method to go back to the main application frame
+    private void goBackToMainApp() {
+        if (mainAppFrame != null) {
+            mainAppFrame.setVisible(true);
+        }
+        dispose();
+    }
+
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(AccountSelectionGUI::new);
+        JFrame mainAppFrame = new JFrame("Main Application");
+        mainAppFrame.setSize(400, 400);
+        mainAppFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        mainAppFrame.setVisible(true);
+
+        SwingUtilities.invokeLater(() -> new AccountSelectionGUI(mainAppFrame));
     }
 }

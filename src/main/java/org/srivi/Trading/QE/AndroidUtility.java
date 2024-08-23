@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
+import org.srivi.Trading.AccountSelectionGUI;
 
 public class AndroidUtility extends JFrame {
 
@@ -54,6 +55,17 @@ public class AndroidUtility extends JFrame {
             }
         });
         add(screenRecordingButton);
+
+        // Button for Account Finder option
+        JButton accountFinderButton = new JButton("Account Finder");
+        accountFinderButton.setBounds(50, 180, 200, 30);
+        accountFinderButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                openAccountSelectionGUI();
+            }
+        });
+        add(accountFinderButton);
 
         // Update the device status
         updateDeviceStatus();
@@ -141,6 +153,11 @@ public class AndroidUtility extends JFrame {
         recordingFrame.setVisible(true);
     }
 
+    // Method to open Account Selection GUI
+    private void openAccountSelectionGUI() {
+        SwingUtilities.invokeLater(() -> new AccountSelectionGUI(this));
+    }
+
     // Method to set the main app frame
     public void setMainAppFrame(JFrame mainAppFrame) {
         this.mainAppFrame = mainAppFrame;
@@ -152,5 +169,9 @@ public class AndroidUtility extends JFrame {
             mainAppFrame.setVisible(true);
         }
         dispose();
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(AndroidUtility::new);
     }
 }
