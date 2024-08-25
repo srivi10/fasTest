@@ -106,6 +106,7 @@ public class AccountSelectionGUI extends JFrame {
 
         // Add keyboard icon next to Username field
         JLabel usernameKeyboardLabel = createIconLabel("/icons/Enter.png");
+       usernameKeyboardLabel.setToolTipText("Quickly Enter Text to Android Devices");
         usernameKeyboardLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -119,6 +120,7 @@ public class AccountSelectionGUI extends JFrame {
 
         // Add keyboard icon next to Password field
         JLabel passwordKeyboardLabel = createIconLabel("/icons/Enter.png");
+        passwordKeyboardLabel.setToolTipText("Quickly Enter Text to Android Devices");
         passwordKeyboardLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {

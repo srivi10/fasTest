@@ -137,6 +137,29 @@ public class ADBHelper {
             ex.printStackTrace();
         }
     }
+    public static void enableWifi() {
+        String command = "svc wifi enable";
+        runADBCommand(command);
+    }
 
+    public static void disableWifi() {
+        String command = "svc wifi disable";
+        runADBCommand(command);
+    }
+
+    private static void runADBCommand(String command) {
+        ProcessBuilder processBuilder = new ProcessBuilder("adb", "shell", command);
+        try {
+            Process process = processBuilder.start();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                System.out.println(line);  // Print output for debugging purposes
+            }
+            process.waitFor();
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 
 }

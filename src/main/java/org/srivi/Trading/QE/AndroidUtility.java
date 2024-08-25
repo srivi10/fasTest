@@ -41,7 +41,7 @@ public class AndroidUtility extends JFrame {
 
         // Button for Take Screenshot option
         JButton screenshotButton = new JButton("Take Screenshot");
-        screenshotButton.setBounds(50, 90, 200, 30);
+        screenshotButton.setBounds(50, 90, 150, 30);
         screenshotButton.setEnabled(true); // Disable for now, enable when the function is implemented
         add(screenshotButton);
         // Load the Screenshot Success Icon
@@ -85,7 +85,7 @@ public class AndroidUtility extends JFrame {
 
         // Button for Screen Recording option
         JButton screenRecordingButton = new JButton("Screen Recording");
-        screenRecordingButton.setBounds(50, 140, 200, 30);
+        screenRecordingButton.setBounds(50, 130, 150, 30);
         screenRecordingButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -96,7 +96,7 @@ public class AndroidUtility extends JFrame {
 
         // Button for Account Finder option
         JButton accountFinderButton = new JButton("Account Finder");
-        accountFinderButton.setBounds(50, 180, 200, 30);
+        accountFinderButton.setBounds(50, 170, 150, 30);
         accountFinderButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -104,12 +104,60 @@ public class AndroidUtility extends JFrame {
             }
         });
         add(accountFinderButton);
+// --- Wi-Fi Control Buttons ---
+        JLabel wifiLabel = new JLabel("Wi-Fi Control :");
+      //  wifiLabel.setFont(interFont.deriveFont(12f));
+        wifiLabel.setBounds(50, 210, 200, 30);
+        add(wifiLabel);
+
+        // Wi-Fi On Button
+        ImageIcon wifiOnIcon = new ImageIcon("src/main/resources/icons/WifiOn.png");
+        Image scaledOnImage = wifiOnIcon.getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH);
+        JButton wifiOnButton = new JButton(new ImageIcon(scaledOnImage));
+        wifiOnButton.setToolTipText("Turn Wi-Fi On");
+        wifiOnButton.setBounds(150, 205, 35, 40);
+        wifiOnButton.setBorderPainted(false);
+        wifiOnButton.setContentAreaFilled(false);
+        wifiOnButton.setFocusPainted(false);
+        wifiOnButton.setOpaque(false);
+        add(wifiOnButton);
+
+// Wi-Fi Off Button
+        ImageIcon wifiOffIcon = new ImageIcon("src/main/resources/icons/WifiOff.png");
+        Image scaledOffImage = wifiOffIcon.getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH);
+        JButton wifiOffButton = new JButton(new ImageIcon(scaledOffImage));
+        wifiOffButton.setToolTipText("Turn Wi-Fi Off");
+        wifiOffButton.setBounds(190, 205, 35, 40);
+        wifiOffButton.setBorderPainted(false);
+        wifiOffButton.setContentAreaFilled(false);
+        wifiOffButton.setFocusPainted(false);
+        wifiOffButton.setOpaque(false);
+        add(wifiOffButton);
+
+        wifiOnButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ADBHelper.enableWifi();
+                //JOptionPane.showMessageDialog(null, "Wi-Fi turned on!");
+            }
+        });
+
+        wifiOffButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ADBHelper.disableWifi();
+              //  JOptionPane.showMessageDialog(null, "Wi-Fi turned off!");
+            }
+        });
 
         // Update the device status
         updateDeviceStatus();
 
         setVisible(true);
+
     }
+
+
 
     // Method to update the device connection status
     public void updateDeviceStatus() {
