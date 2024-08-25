@@ -42,8 +42,46 @@ public class AndroidUtility extends JFrame {
         // Button for Take Screenshot option
         JButton screenshotButton = new JButton("Take Screenshot");
         screenshotButton.setBounds(50, 90, 200, 30);
-        screenshotButton.setEnabled(false); // Disable for now, enable when the function is implemented
+        screenshotButton.setEnabled(true); // Disable for now, enable when the function is implemented
         add(screenshotButton);
+        // Load the Screenshot Success Icon
+        ImageIcon screenshotIcon = new ImageIcon("src/main/resources/icons/Screencap.png");
+        Image scaledImage = screenshotIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+
+// Create a new ImageIcon from the scaled image
+        ImageIcon smoothIcon = new ImageIcon(scaledImage);
+
+// Create a JLabel with the smoothed icon
+        JLabel iconLabel = new JLabel(smoothIcon);
+        iconLabel.setBounds(260, 90, 25, 25);
+        iconLabel.setVisible(false); // Initially invisible
+        add(iconLabel);
+
+// Add ActionListener to the Screenshot Button
+        screenshotButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                boolean success = ADBHelper.takeScreenshot();
+                if (success) {
+                    // Show the icon
+                    iconLabel.setVisible(true);
+
+                    // Create a Timer to hide the icon after 2 seconds
+                    Timer timer = new Timer(2000, new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent evt) {
+                            iconLabel.setVisible(false);
+                        }
+                    });
+                    timer.setRepeats(false); // Make sure the timer only runs once
+                    timer.start();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Failed to take screenshot", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
+
 
         // Button for Screen Recording option
         JButton screenRecordingButton = new JButton("Screen Recording");

@@ -5,7 +5,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class ADBHelper {
@@ -87,4 +89,54 @@ public class ADBHelper {
             JOptionPane.showMessageDialog(null, "Failed to stop screen recording: " + ex.getMessage());
         }
     }
+
+    // Method to take a screenshot, pull it to the Desktop, and delete it from the device
+    public static boolean takeScreenshot() {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+
+        // Append the timestamp to the file name
+        String fileName = "MBNA_Android_" + timeStamp;
+        String savePath = System.getProperty("user.home") + "/Desktop/" + fileName + ".png";
+
+        try {
+            // Step 1: Take screenshot and save it to the device
+            ProcessBuilder takeScreenshot = new ProcessBuilder("adb", "shell", "screencap", "-p", "/sdcard/" + fileName + ".png");
+            Process takeScreenshotProcess = takeScreenshot.start();
+            takeScreenshotProcess.waitFor(); // Wait for the process to complete
+
+            // Step 2: Pull the screenshot from the device to the Desktop
+            ProcessBuilder pullScreenshot = new ProcessBuilder("adb", "pull", "/sdcard/" + fileName + ".png", savePath);
+            Process pullScreenshotProcess = pullScreenshot.start();
+            pullScreenshotProcess.waitFor(); // Wait for the process to complete
+
+            // Step 3: Delete the screenshot from the device
+            ProcessBuilder deleteScreenshot = new ProcessBuilder("adb", "shell", "rm", "/sdcard/" + fileName + ".png");
+            Process deleteScreenshotProcess = deleteScreenshot.start();
+            deleteScreenshotProcess.waitFor(); // Wait for the process to complete
+
+            return true; // Return true if all commands executed successfully
+
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+            return false; // Return false if any command fails
+        }
+    }
+
+    public static void passTextToEmulator(String text) {
+        try {
+            // Pass the text to the adb shell input text command
+            String command = "adb shell input text \"" + text + "\"";
+            Process processInputText = Runtime.getRuntime().exec(command);
+            processInputText.waitFor();
+
+            // Pass the adb shell input keyevent KEYCODE_TAB command
+            String commandKeyEventTab = "adb shell input keyevent KEYCODE_TAB";
+            Process processKeyEventTab = Runtime.getRuntime().exec(commandKeyEventTab);
+            processKeyEventTab.waitFor();
+        } catch (IOException | InterruptedException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+
 }

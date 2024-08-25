@@ -6,11 +6,14 @@ import org.srivi.Trading.QE.FontUtil;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.IOException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.srivi.Trading.QE.ADBHelper;
 
 public class AccountSelectionGUI extends JFrame {
 
@@ -32,6 +35,7 @@ public class AccountSelectionGUI extends JFrame {
     private JCheckBox paymentPlanCheckBox;
     private JLabel loadingLabel;
     private JTextArea errorTextArea;
+
 
     private boolean isLoading = false;
 
@@ -58,7 +62,7 @@ public class AccountSelectionGUI extends JFrame {
         accountHolderComboBox = new JComboBox<>(new String[]{"Single", "Multi"});
         accountTypeComboBox = new JComboBox<>(new String[]{"PCH", "Au"});
         transferComboBox = new JComboBox<>(new String[]{"Select", "Eligible", "Ineligible"});
-        offersComboBox = new JComboBox<>(new String[]{"Select", "Eligible", "Ineligible"});
+        offersComboBox =  new JComboBox<>(new String[]{"Select", "Eligible", "Ineligible"});
         paymentPlanComboBox = new JComboBox<>(new String[]{"Select", "Eligible", "Ineligible"});
 
         submitButton = new JButton("Submit");
@@ -99,8 +103,29 @@ public class AccountSelectionGUI extends JFrame {
 
         add(new JLabel("Username:")).setBounds(20, 300, 120, 30);
         add(usernameField).setBounds(150, 300, 200, 30);
+
+        // Add keyboard icon next to Username field
+        JLabel usernameKeyboardLabel = createIconLabel("/icons/Enter.png");
+        usernameKeyboardLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+             ADBHelper.passTextToEmulator(usernameField.getText());
+            }
+        });
+        add(usernameKeyboardLabel).setBounds(360, 300, 30, 30); // Adjust bounds as needed
+
         add(new JLabel("Password:")).setBounds(20, 340, 120, 30);
         add(passwordField).setBounds(150, 340, 200, 30);
+
+        // Add keyboard icon next to Password field
+        JLabel passwordKeyboardLabel = createIconLabel("/icons/Enter.png");
+        passwordKeyboardLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                ADBHelper.passTextToEmulator(passwordField.getText());
+            }
+        });
+        add(passwordKeyboardLabel).setBounds(360, 340, 30, 30); // Adjust bounds as needed
 
         add(new JLabel("Account Holder")).setBounds(20, 380, 120, 30);
         add(accountHolderField).setBounds(150, 380, 200, 30);
@@ -127,7 +152,7 @@ public class AccountSelectionGUI extends JFrame {
             // Show loading label and fetch accounts after delay
             loadingLabel.setVisible(true);
             submitButton.setEnabled(false);
-            new Timer(2000, evt -> {
+            new Timer(1000, evt -> {
                 fetchAndDisplayAccounts();
                 loadingLabel.setVisible(false);
                 submitButton.setEnabled(true);
@@ -137,6 +162,21 @@ public class AccountSelectionGUI extends JFrame {
         resetButton.addActionListener(e -> resetFields());
 
         setVisible(true);
+    }
+
+    private JLabel createIconLabel(String iconPath) {
+        JLabel label = new JLabel();
+        URL iconURL = getClass().getResource(iconPath);
+        if (iconURL != null) {
+            ImageIcon icon = new ImageIcon(iconURL);
+            label.setOpaque(true); // Make the label opaque to display the background color
+            Image image = icon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH); // Scale to be compact
+            label.setIcon(new ImageIcon(image));
+        } else {
+            System.err.println("Icon not found: " + iconPath);
+        }
+       // label.setPreferredSize(new Dimension(18, 18)); // Ensure the label has a size
+        return label;
     }
 
     private void fetchAndDisplayAccounts() {
@@ -163,35 +203,21 @@ public class AccountSelectionGUI extends JFrame {
             criteria.put("Payment Plan", (String) paymentPlanComboBox.getSelectedItem());
         }
 
-        List<String[]> matchedAccounts = fetcher.fetchAccounts(criteria);
+        List<String[]> matchingAccounts = fetcher.fetchAccounts(criteria);
 
-        displayResults(matchedAccounts);
-    }
-
-    private void displayResults(List<String[]> accounts) {
-        errorTextArea.setText(""); // Clear previous error messages
-        if (accounts.isEmpty()) {
-            errorTextArea.setText("Currently, CID with selected parameters is unavailable.");
+        if (matchingAccounts.isEmpty()) {
+            errorTextArea.setText("No accounts found matching the selected criteria.");
         } else {
-            for (String[] account : accounts) {
-                usernameField.setText(account[0]);
-                passwordField.setText(account[1]);
-
-                accountHolderField.setText(account[2]);  // Set account holder text
-                accountTypeField.setText(account[3]);    // Set account type text
-                transferCheckBox.setSelected("Eligible".equals(account[4]));
-                offersCheckBox.setSelected("Eligible".equals(account[5]));
-                paymentPlanCheckBox.setSelected("Eligible".equals(account[6]));
-            }
+            String[] account = matchingAccounts.get(0);  // Get the first match
+            usernameField.setText(account[0]);
+            passwordField.setText(account[1]);
+            accountHolderField.setText(account[2]);
+            accountTypeField.setText(account[3]);
+            transferCheckBox.setSelected("Eligible".equalsIgnoreCase(account[4]));
+            offersCheckBox.setSelected("Eligible".equalsIgnoreCase(account[5]));
+            paymentPlanCheckBox.setSelected("Eligible".equalsIgnoreCase(account[6]));
+            errorTextArea.setText("");  // Clear any previous error messages
         }
-    }
-
-    private void clearTextFieldsAndCheckBoxes() {
-        accountHolderField.setText("");
-        accountTypeField.setText("");
-        transferCheckBox.setSelected(false);
-        offersCheckBox.setSelected(false);
-        paymentPlanCheckBox.setSelected(false);
     }
 
     private void resetFields() {
@@ -200,18 +226,26 @@ public class AccountSelectionGUI extends JFrame {
         transferComboBox.setSelectedIndex(0);
         offersComboBox.setSelectedIndex(0);
         paymentPlanComboBox.setSelectedIndex(0);
-        usernameField.setText("");
-        passwordField.setText("");
         clearTextFieldsAndCheckBoxes();
         errorTextArea.setText("");
     }
 
+    private void clearTextFieldsAndCheckBoxes() {
+        usernameField.setText("");
+        passwordField.setText("");
+        accountHolderField.setText("");
+        accountTypeField.setText("");
+        transferCheckBox.setSelected(false);
+        offersCheckBox.setSelected(false);
+        paymentPlanCheckBox.setSelected(false);
+    }
+
     private void goBackToMainApp() {
-        this.dispose();
         mainAppFrame.setVisible(true);
+        dispose();
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new AccountSelectionGUI(null));
+        SwingUtilities.invokeLater(() -> new AccountSelectionGUI(null));  // Replace 'null' with reference to main app frame if needed
     }
 }
