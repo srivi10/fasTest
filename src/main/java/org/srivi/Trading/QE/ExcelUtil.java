@@ -3,18 +3,16 @@ package org.srivi.Trading.QE;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import java.io.FileInputStream;
+import java.io.InputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 public class ExcelUtil {
-    public static Map<String, String[]> readAccountData(String filePath) {
+    public static Map<String, String[]> readAccountData(InputStream inputStream) throws IOException {
         Map<String, String[]> accounts = new HashMap<>();
 
-        try (FileInputStream fis = new FileInputStream(filePath);
-             Workbook workbook = new XSSFWorkbook(fis)) {
-
+        try (Workbook workbook = new XSSFWorkbook(inputStream)) {
             Sheet sheet = workbook.getSheetAt(0);
 
             for (Row row : sheet) {
@@ -33,8 +31,6 @@ public class ExcelUtil {
                 // Store in map with account set as key
                 accounts.put(accountSet, new String[]{username, password, holder, type, transfer, offers, paymentPlan});
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
 
         return accounts;

@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 import org.srivi.Trading.AccountSelectionGUI;
+import org.srivi.Trading.QE.ADBHelper;
 
 public class AndroidUtility extends JFrame {
 
@@ -45,7 +46,8 @@ public class AndroidUtility extends JFrame {
         screenshotButton.setEnabled(true); // Disable for now, enable when the function is implemented
         add(screenshotButton);
         // Load the Screenshot Success Icon
-        ImageIcon screenshotIcon = new ImageIcon("src/main/resources/icons/Screencap.png");
+
+        ImageIcon screenshotIcon = new ImageIcon(getClass().getClassLoader().getResource("icons/Screencap.png"));
         Image scaledImage = screenshotIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
 
 // Create a new ImageIcon from the scaled image
@@ -111,7 +113,7 @@ public class AndroidUtility extends JFrame {
         add(wifiLabel);
 
         // Wi-Fi On Button
-        ImageIcon wifiOnIcon = new ImageIcon("src/main/resources/icons/WifiOn.png");
+        ImageIcon wifiOnIcon = new ImageIcon(getClass().getClassLoader().getResource("icons/WifiOn.png"));
         Image scaledOnImage = wifiOnIcon.getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH);
         JButton wifiOnButton = new JButton(new ImageIcon(scaledOnImage));
         wifiOnButton.setToolTipText("Turn Wi-Fi On");
@@ -123,7 +125,7 @@ public class AndroidUtility extends JFrame {
         add(wifiOnButton);
 
 // Wi-Fi Off Button
-        ImageIcon wifiOffIcon = new ImageIcon("src/main/resources/icons/WifiOff.png");
+        ImageIcon wifiOffIcon = new ImageIcon(getClass().getClassLoader().getResource("icons/WifiOff.png"));
         Image scaledOffImage = wifiOffIcon.getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH);
         JButton wifiOffButton = new JButton(new ImageIcon(scaledOffImage));
         wifiOffButton.setToolTipText("Turn Wi-Fi Off");
@@ -257,7 +259,7 @@ public class AndroidUtility extends JFrame {
         dispose();
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(AndroidUtility::new);
-    }
+//    public static void main(String[] args) {
+//        SwingUtilities.invokeLater(AndroidUtility::new);
+//    }
 }

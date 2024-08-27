@@ -9,11 +9,12 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import org.srivi.Trading.QE.ADBHelper;
+import java.util.List;
 
 public class AccountSelectionGUI extends JFrame {
 
@@ -35,7 +36,6 @@ public class AccountSelectionGUI extends JFrame {
     private JCheckBox paymentPlanCheckBox;
     private JLabel loadingLabel;
     private JTextArea errorTextArea;
-
 
     private boolean isLoading = false;
 
@@ -62,7 +62,7 @@ public class AccountSelectionGUI extends JFrame {
         accountHolderComboBox = new JComboBox<>(new String[]{"Single", "Multi"});
         accountTypeComboBox = new JComboBox<>(new String[]{"PCH", "Au"});
         transferComboBox = new JComboBox<>(new String[]{"Select", "Eligible", "Ineligible"});
-        offersComboBox =  new JComboBox<>(new String[]{"Select", "Eligible", "Ineligible"});
+        offersComboBox = new JComboBox<>(new String[]{"Select", "Eligible", "Ineligible"});
         paymentPlanComboBox = new JComboBox<>(new String[]{"Select", "Eligible", "Ineligible"});
 
         submitButton = new JButton("Submit");
@@ -106,11 +106,11 @@ public class AccountSelectionGUI extends JFrame {
 
         // Add keyboard icon next to Username field
         JLabel usernameKeyboardLabel = createIconLabel("/icons/Enter.png");
-       usernameKeyboardLabel.setToolTipText("Quickly Enter Text to Android Devices");
+        usernameKeyboardLabel.setToolTipText("Quickly Enter Text to Android Devices");
         usernameKeyboardLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-             ADBHelper.passTextToEmulator(usernameField.getText());
+                ADBHelper.passTextToEmulator(usernameField.getText());
             }
         });
         add(usernameKeyboardLabel).setBounds(360, 300, 30, 30); // Adjust bounds as needed
@@ -177,48 +177,55 @@ public class AccountSelectionGUI extends JFrame {
         } else {
             System.err.println("Icon not found: " + iconPath);
         }
-       // label.setPreferredSize(new Dimension(18, 18)); // Ensure the label has a size
         return label;
     }
 
     private void fetchAndDisplayAccounts() {
-        // Example file path - update this with the actual path
-        String filePath = "src/main/resources/credentials/accounts.xlsx";
+        // Use ClassLoader to get the resource from the JAR
+        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream("credentials/accounts.xlsx")) {
+            if (inputStream == null) {
+                throw new IOException("Resource not found: credentials/accounts.xlsx");
+            }
 
-        Map<String, String[]> accounts = ExcelUtil.readAccountData(filePath);
-        AccountFetcher fetcher = new AccountFetcher(accounts);
+            // Pass the InputStream to ExcelUtil for reading the data
+            Map<String, String[]> accounts = ExcelUtil.readAccountData(inputStream);
+            AccountFetcher fetcher = new AccountFetcher(accounts);
 
-        Map<String, String> criteria = new HashMap<>();
-        if (!"Select".equals(accountHolderComboBox.getSelectedItem())) {
-            criteria.put("Account Holder", (String) accountHolderComboBox.getSelectedItem());
-        }
-        if (!"Select".equals(accountTypeComboBox.getSelectedItem())) {
-            criteria.put("Account Type", (String) accountTypeComboBox.getSelectedItem());
-        }
-        if (!"Select".equals(transferComboBox.getSelectedItem())) {
-            criteria.put("Transfer", (String) transferComboBox.getSelectedItem());
-        }
-        if (!"Select".equals(offersComboBox.getSelectedItem())) {
-            criteria.put("Offers", (String) offersComboBox.getSelectedItem());
-        }
-        if (!"Select".equals(paymentPlanComboBox.getSelectedItem())) {
-            criteria.put("Payment Plan", (String) paymentPlanComboBox.getSelectedItem());
-        }
+            // Get selected criteria
+            Map<String, String> criteria = new HashMap<>();
+            if (!"Select".equals(accountHolderComboBox.getSelectedItem())) {
+                criteria.put("Account Holder", (String) accountHolderComboBox.getSelectedItem());
+            }
+            if (!"Select".equals(accountTypeComboBox.getSelectedItem())) {
+                criteria.put("Account Type", (String) accountTypeComboBox.getSelectedItem());
+            }
+            if (!"Select".equals(transferComboBox.getSelectedItem())) {
+                criteria.put("Transfer", (String) transferComboBox.getSelectedItem());
+            }
+            if (!"Select".equals(offersComboBox.getSelectedItem())) {
+                criteria.put("Offers", (String) offersComboBox.getSelectedItem());
+            }
+            if (!"Select".equals(paymentPlanComboBox.getSelectedItem())) {
+                criteria.put("Payment Plan", (String) paymentPlanComboBox.getSelectedItem());
+            }
 
-        List<String[]> matchingAccounts = fetcher.fetchAccounts(criteria);
+            // Fetch accounts based on criteria
+            List<String[]> matchingAccounts = fetcher.fetchAccounts(criteria);
+            if (!matchingAccounts.isEmpty()) {
+                String[] account = matchingAccounts.get(0);
+                usernameField.setText(account[0]);
+                passwordField.setText(account[1]);
+                accountHolderField.setText(account[2]);
+                accountTypeField.setText(account[3]);
+                transferCheckBox.setSelected("Eligible".equalsIgnoreCase(account[4]));
+                offersCheckBox.setSelected("Eligible".equalsIgnoreCase(account[5]));
+                paymentPlanCheckBox.setSelected("Eligible".equalsIgnoreCase(account[6]));
+            } else {
+                errorTextArea.setText("No accounts found matching the criteria.");
+            }
 
-        if (matchingAccounts.isEmpty()) {
-            errorTextArea.setText("No accounts found matching the selected criteria.");
-        } else {
-            String[] account = matchingAccounts.get(0);  // Get the first match
-            usernameField.setText(account[0]);
-            passwordField.setText(account[1]);
-            accountHolderField.setText(account[2]);
-            accountTypeField.setText(account[3]);
-            transferCheckBox.setSelected("Eligible".equalsIgnoreCase(account[4]));
-            offersCheckBox.setSelected("Eligible".equalsIgnoreCase(account[5]));
-            paymentPlanCheckBox.setSelected("Eligible".equalsIgnoreCase(account[6]));
-            errorTextArea.setText("");  // Clear any previous error messages
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -228,7 +235,13 @@ public class AccountSelectionGUI extends JFrame {
         transferComboBox.setSelectedIndex(0);
         offersComboBox.setSelectedIndex(0);
         paymentPlanComboBox.setSelectedIndex(0);
-        clearTextFieldsAndCheckBoxes();
+        usernameField.setText("");
+        passwordField.setText("");
+        accountHolderField.setText("");
+        accountTypeField.setText("");
+        transferCheckBox.setSelected(false);
+        offersCheckBox.setSelected(false);
+        paymentPlanCheckBox.setSelected(false);
         errorTextArea.setText("");
     }
 
@@ -240,14 +253,11 @@ public class AccountSelectionGUI extends JFrame {
         transferCheckBox.setSelected(false);
         offersCheckBox.setSelected(false);
         paymentPlanCheckBox.setSelected(false);
+        errorTextArea.setText("");
     }
 
     private void goBackToMainApp() {
-        mainAppFrame.setVisible(true);
-        dispose();
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new AccountSelectionGUI(null));  // Replace 'null' with reference to main app frame if needed
+        this.dispose(); // Close the Account Selection GUI
+        mainAppFrame.setVisible(true); // Show the main application frame
     }
 }
