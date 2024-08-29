@@ -53,7 +53,8 @@ public class iOSUtility extends JFrame {
 
         // Button for Take Screenshot option
         JButton screenshotButton = new JButton("Take Screenshot");
-        screenshotButton.setBounds(50, 100, 150, 30);
+        screenshotButton.setBounds(50, 100, 130, 30);
+        screenshotButton.setFont(interFont);
         screenshotButton.setEnabled(true); // Disable for now, enable when the function is implemented
         add(screenshotButton);
 
@@ -96,7 +97,8 @@ public class iOSUtility extends JFrame {
 
         // Button for Screen Recording option
         JButton screenRecordingButton = new JButton("Screen Recording");
-        screenRecordingButton.setBounds(50, 140, 150, 30);
+        screenRecordingButton.setBounds(50, 140, 130, 30);
+        screenRecordingButton.setFont(interFont);
         screenRecordingButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -107,7 +109,8 @@ public class iOSUtility extends JFrame {
 
         // Button for Account Finder option
         JButton accountFinderButton = new JButton("Account Finder");
-        accountFinderButton.setBounds(50, 180, 150, 30);
+        accountFinderButton.setBounds(50, 180, 130, 30);
+        accountFinderButton.setFont(interFont);
         accountFinderButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -153,38 +156,46 @@ public class iOSUtility extends JFrame {
         // File Name Label and Field
         JLabel fileNameLabel = new JLabel("File Name:");
         fileNameLabel.setBounds(50, 120, 100, 30);
+        fileNameLabel.setFont(interFont);
         recordingFrame.add(fileNameLabel);
 
         fileNameField = new JTextField("ios_screen_record");
-        fileNameField.setBounds(150, 120, 200, 30);
+        fileNameField.setFont(interFont);
+        fileNameField.setBounds(150, 120, 150, 30);
         recordingFrame.add(fileNameField);
 
         // File Location Label and Field
         JLabel fileLocationLabel = new JLabel("File Location:");
+        fileLocationLabel.setFont(interFont);
         fileLocationLabel.setBounds(50, 170, 100, 30);
         recordingFrame.add(fileLocationLabel);
 
         fileLocationField = new JTextField();
-        fileLocationField.setBounds(150, 170, 200, 30);
+        fileLocationField.setBounds(150, 170, 150, 30);
+        fileLocationField.setFont(interFont);
         recordingFrame.add(fileLocationField);
 
         JButton browseButton = new JButton("Browse");
         browseButton.setBounds(360, 170, 80, 30);
         recordingFrame.add(browseButton);
+        browseButton.setFont(interFont);
         browseButton.addActionListener(e -> FileChooserUtil.selectFileLocation(fileLocationField));
 
         // Start and Stop Recording Buttons
-        JButton startRecordButton = new JButton("Start Screen Recording");
+        JButton startRecordButton = new JButton("Start Recording");
         startRecordButton.setBounds(50, 230, 150, 30);
+        startRecordButton.setFont(interFont);
         recordingFrame.add(startRecordButton);
 
-        JButton stopRecordButton = new JButton("Stop Screen Recording");
+        JButton stopRecordButton = new JButton("Stop Recording");
         stopRecordButton.setBounds(220, 230, 150, 30);
+        stopRecordButton.setFont(interFont);
         stopRecordButton.setEnabled(false);
         recordingFrame.add(stopRecordButton);
 
         savedLocationLabel = new JLabel("");
         savedLocationLabel.setBounds(20, 280, 460, 30);
+        savedLocationLabel.setFont(interFont);
         recordingFrame.add(savedLocationLabel);
 
         startRecordButton.addActionListener(e -> {

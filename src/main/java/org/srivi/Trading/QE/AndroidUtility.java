@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.util.List;
 import org.srivi.Trading.AccountSelectionGUI;
 import org.srivi.Trading.QE.ADBHelper;
@@ -15,17 +17,20 @@ public class AndroidUtility extends JFrame {
     private JTextField fileLocationField;
     private JLabel savedLocationLabel;
     private JLabel deviceStatusLabel;
-
-    public AndroidUtility() {
+    private HelpOptionsPanel helpOptionsPanel;
+        public AndroidUtility() {
         setTitle("Android Utility");
-        setSize(400, 300);
+        setSize(400, 400);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(null);
         // Set the custom font
         Font interFont = FontUtil.getInterFont(12f);
 
+
+
         // Back button to return to main app
         JButton backButton = new JButton("Back");
+        backButton.setFont(interFont);
         backButton.setBounds(10, 10, 80, 30);
         backButton.addActionListener(new ActionListener() {
             @Override
@@ -37,12 +42,14 @@ public class AndroidUtility extends JFrame {
 
         // Label for device connection status
         deviceStatusLabel = new JLabel("Device Connected: Checking...");
+        deviceStatusLabel.setFont(interFont);
         deviceStatusLabel.setBounds(50, 50, 300, 30);
         add(deviceStatusLabel);
 
         // Button for Take Screenshot option
         JButton screenshotButton = new JButton("Take Screenshot");
-        screenshotButton.setBounds(50, 90, 150, 30);
+        screenshotButton.setFont(interFont);
+        screenshotButton.setBounds(50, 90, 130, 30);
         screenshotButton.setEnabled(true); // Disable for now, enable when the function is implemented
         add(screenshotButton);
         // Load the Screenshot Success Icon
@@ -55,7 +62,7 @@ public class AndroidUtility extends JFrame {
 
 // Create a JLabel with the smoothed icon
         JLabel iconLabel = new JLabel(smoothIcon);
-        iconLabel.setBounds(260, 90, 25, 25);
+        iconLabel.setBounds(180, 90, 30, 30);
         iconLabel.setVisible(false); // Initially invisible
         add(iconLabel);
 
@@ -87,7 +94,8 @@ public class AndroidUtility extends JFrame {
 
         // Button for Screen Recording option
         JButton screenRecordingButton = new JButton("Screen Recording");
-        screenRecordingButton.setBounds(50, 130, 150, 30);
+        screenRecordingButton.setFont(interFont);
+        screenRecordingButton.setBounds(50, 130, 130, 30);
         screenRecordingButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -98,7 +106,8 @@ public class AndroidUtility extends JFrame {
 
         // Button for Account Finder option
         JButton accountFinderButton = new JButton("Account Finder");
-        accountFinderButton.setBounds(50, 170, 150, 30);
+        accountFinderButton.setBounds(50, 170, 130, 30);
+        accountFinderButton.setFont(interFont);
         accountFinderButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -109,6 +118,7 @@ public class AndroidUtility extends JFrame {
 // --- Wi-Fi Control Buttons ---
         JLabel wifiLabel = new JLabel("Wi-Fi Control :");
       //  wifiLabel.setFont(interFont.deriveFont(12f));
+        wifiLabel.setFont(interFont);
         wifiLabel.setBounds(50, 210, 200, 30);
         add(wifiLabel);
 
@@ -157,6 +167,20 @@ public class AndroidUtility extends JFrame {
 
         setVisible(true);
 
+            helpOptionsPanel = new HelpOptionsPanel(getWidth(), getHeight());
+            add(helpOptionsPanel);
+
+            // Add ComponentListener to handle resizing
+            addComponentListener(new ComponentAdapter() {
+                @Override
+                public void componentResized(ComponentEvent e) {
+                    // Reposition HelpOptionsPanel
+                    helpOptionsPanel.setBounds(0, getHeight() - 100, getWidth(), 100);
+                }
+            });
+
+        // Add HelpOptionsPanel after the frame is visible
+
     }
 
 
@@ -171,7 +195,7 @@ public class AndroidUtility extends JFrame {
     // Method to open Screen Recording View
     private void openScreenRecordingView() {
         JFrame recordingFrame = new JFrame("Screen Recording");
-        recordingFrame.setSize(500, 350);
+        recordingFrame.setSize(500, 400);
         recordingFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         recordingFrame.setLayout(null);
         // Set the custom font
@@ -191,39 +215,47 @@ public class AndroidUtility extends JFrame {
 
         // File Name Label and Field
         JLabel fileNameLabel = new JLabel("File Name:");
-        fileNameLabel.setBounds(50, 120, 100, 30);
+        fileNameLabel.setBounds(50, 70, 100, 30);
+        fileNameLabel.setFont(interFont);
         recordingFrame.add(fileNameLabel);
 
         fileNameField = new JTextField("android_screen_record");
-        fileNameField.setBounds(150, 120, 200, 30);
+        fileNameField.setBounds(150, 70, 150, 30);
+        fileNameField.setFont(interFont);
         recordingFrame.add(fileNameField);
 
         // File Location Label and Field
         JLabel fileLocationLabel = new JLabel("File Location:");
-        fileLocationLabel.setBounds(50, 170, 100, 30);
+        fileLocationLabel.setFont(interFont);
+        fileLocationLabel.setBounds(50, 120, 100, 30);
         recordingFrame.add(fileLocationLabel);
 
         fileLocationField = new JTextField();
-        fileLocationField.setBounds(150, 170, 200, 30);
+        fileLocationField.setBounds(150, 120, 150, 30);
+        fileLocationField.setFont(interFont);
         recordingFrame.add(fileLocationField);
 
         JButton browseButton = new JButton("Browse");
-        browseButton.setBounds(360, 170, 80, 30);
+        browseButton.setBounds(360, 120, 80, 30);
+        browseButton.setFont(interFont);
         recordingFrame.add(browseButton);
         browseButton.addActionListener(e -> FileChooserUtil.selectFileLocation(fileLocationField));
 
         // Start and Stop Recording Buttons
-        JButton startRecordButton = new JButton("Start Screen Recording");
-        startRecordButton.setBounds(50, 230, 150, 30);
+        JButton startRecordButton = new JButton("Start Recording");
+        startRecordButton.setBounds(50, 170, 150, 30);
+        startRecordButton.setFont(interFont);
         recordingFrame.add(startRecordButton);
 
-        JButton stopRecordButton = new JButton("Stop Screen Recording");
-        stopRecordButton.setBounds(220, 230, 150, 30);
+        JButton stopRecordButton = new JButton("Stop Recording");
+        stopRecordButton.setBounds(220, 170, 150, 30);
+        stopRecordButton.setFont(interFont);
         stopRecordButton.setEnabled(false);
         recordingFrame.add(stopRecordButton);
 
         savedLocationLabel = new JLabel("");
         savedLocationLabel.setBounds(20, 280, 460, 30);
+        savedLocationLabel.setFont(interFont);
         recordingFrame.add(savedLocationLabel);
 
         startRecordButton.addActionListener(e -> {
