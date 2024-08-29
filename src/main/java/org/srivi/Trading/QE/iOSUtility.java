@@ -6,9 +6,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 import org.srivi.Trading.AccountSelectionGUI;
-import org.srivi.Trading.QE.ADBHelper;
+import org.srivi.Trading.QE.XcrunHelper;
 
-public class AndroidUtility extends JFrame {
+public class iOSUtility extends JFrame {
 
     private JFrame mainAppFrame;
     private JTextField fileNameField;
@@ -16,8 +16,8 @@ public class AndroidUtility extends JFrame {
     private JLabel savedLocationLabel;
     private JLabel deviceStatusLabel;
 
-    public AndroidUtility() {
-        setTitle("Android Utility");
+    public iOSUtility() {
+        setTitle("iOS Utility");
         setSize(400, 300);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(null);
@@ -35,35 +35,46 @@ public class AndroidUtility extends JFrame {
         });
         add(backButton);
 
+        // Warning Icon
+        ImageIcon warningIcon = new ImageIcon(getClass().getClassLoader().getResource("icons/iOSUtilityWarning.png"));
+        Image scaledWarningIcon = warningIcon.getImage().getScaledInstance(16, 16, Image.SCALE_SMOOTH);
+
+        // Warning Label
+        JLabel warningLabel = new JLabel("Supported Device Type: Simulator", new ImageIcon(scaledWarningIcon), JLabel.LEFT);
+        warningLabel.setBounds(170, 20, 300, 20);
+        warningLabel.setFont(interFont);
+        add(warningLabel);
+
         // Label for device connection status
         deviceStatusLabel = new JLabel("Device Connected: Checking...");
-        deviceStatusLabel.setBounds(50, 50, 300, 30);
+        deviceStatusLabel.setBounds(50, 60, 300, 30);
+        deviceStatusLabel.setFont(interFont);
         add(deviceStatusLabel);
 
         // Button for Take Screenshot option
         JButton screenshotButton = new JButton("Take Screenshot");
-        screenshotButton.setBounds(50, 90, 150, 30);
+        screenshotButton.setBounds(50, 100, 150, 30);
         screenshotButton.setEnabled(true); // Disable for now, enable when the function is implemented
         add(screenshotButton);
-        // Load the Screenshot Success Icon
 
+        // Load the Screenshot Success Icon
         ImageIcon screenshotIcon = new ImageIcon(getClass().getClassLoader().getResource("icons/Screencap.png"));
         Image scaledImage = screenshotIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
 
-// Create a new ImageIcon from the scaled image
+        // Create a new ImageIcon from the scaled image
         ImageIcon smoothIcon = new ImageIcon(scaledImage);
 
-// Create a JLabel with the smoothed icon
+        // Create a JLabel with the smoothed icon
         JLabel iconLabel = new JLabel(smoothIcon);
-        iconLabel.setBounds(260, 90, 25, 25);
+        iconLabel.setBounds(260, 100, 25, 25);
         iconLabel.setVisible(false); // Initially invisible
         add(iconLabel);
 
-// Add ActionListener to the Screenshot Button
+        // Add ActionListener to the Screenshot Button
         screenshotButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                boolean success = ADBHelper.takeScreenshot();
+                boolean success = XcrunHelper.takeScreenshot();
                 if (success) {
                     // Show the icon
                     iconLabel.setVisible(true);
@@ -83,11 +94,9 @@ public class AndroidUtility extends JFrame {
             }
         });
 
-
-
         // Button for Screen Recording option
         JButton screenRecordingButton = new JButton("Screen Recording");
-        screenRecordingButton.setBounds(50, 130, 150, 30);
+        screenRecordingButton.setBounds(50, 140, 150, 30);
         screenRecordingButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -98,7 +107,7 @@ public class AndroidUtility extends JFrame {
 
         // Button for Account Finder option
         JButton accountFinderButton = new JButton("Account Finder");
-        accountFinderButton.setBounds(50, 170, 150, 30);
+        accountFinderButton.setBounds(50, 180, 150, 30);
         accountFinderButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -106,64 +115,16 @@ public class AndroidUtility extends JFrame {
             }
         });
         add(accountFinderButton);
-// --- Wi-Fi Control Buttons ---
-        JLabel wifiLabel = new JLabel("Wi-Fi Control :");
-      //  wifiLabel.setFont(interFont.deriveFont(12f));
-        wifiLabel.setBounds(50, 210, 200, 30);
-        add(wifiLabel);
-
-        // Wi-Fi On Button
-        ImageIcon wifiOnIcon = new ImageIcon(getClass().getClassLoader().getResource("icons/WifiOn.png"));
-        Image scaledOnImage = wifiOnIcon.getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH);
-        JButton wifiOnButton = new JButton(new ImageIcon(scaledOnImage));
-        wifiOnButton.setToolTipText("Turn Wi-Fi On");
-        wifiOnButton.setBounds(150, 205, 35, 40);
-        wifiOnButton.setBorderPainted(false);
-        wifiOnButton.setContentAreaFilled(false);
-        wifiOnButton.setFocusPainted(false);
-        wifiOnButton.setOpaque(false);
-        add(wifiOnButton);
-
-// Wi-Fi Off Button
-        ImageIcon wifiOffIcon = new ImageIcon(getClass().getClassLoader().getResource("icons/WifiOff.png"));
-        Image scaledOffImage = wifiOffIcon.getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH);
-        JButton wifiOffButton = new JButton(new ImageIcon(scaledOffImage));
-        wifiOffButton.setToolTipText("Turn Wi-Fi Off");
-        wifiOffButton.setBounds(190, 205, 35, 40);
-        wifiOffButton.setBorderPainted(false);
-        wifiOffButton.setContentAreaFilled(false);
-        wifiOffButton.setFocusPainted(false);
-        wifiOffButton.setOpaque(false);
-        add(wifiOffButton);
-
-        wifiOnButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ADBHelper.enableWifi();
-                //JOptionPane.showMessageDialog(null, "Wi-Fi turned on!");
-            }
-        });
-
-        wifiOffButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ADBHelper.disableWifi();
-              //  JOptionPane.showMessageDialog(null, "Wi-Fi turned off!");
-            }
-        });
 
         // Update the device status
         updateDeviceStatus();
 
         setVisible(true);
-
     }
-
-
 
     // Method to update the device connection status
     public void updateDeviceStatus() {
-        List<String> devices = ADBHelper.getConnectedDevices();
+        List<String> devices = XcrunHelper.getConnectedDevices();
         String statusText = devices.isEmpty() ? "No devices connected." : "Connected Devices: " + String.join(", ", devices);
         deviceStatusLabel.setText(statusText);
     }
@@ -177,7 +138,7 @@ public class AndroidUtility extends JFrame {
         // Set the custom font
         Font interFont = FontUtil.getInterFont(12f);
 
-        // Back button to return to AndroidUtility view
+        // Back button to return to iOSUtility view
         JButton backButton = new JButton("Back");
         backButton.setBounds(10, 10, 80, 30);
         backButton.addActionListener(new ActionListener() {
@@ -194,7 +155,7 @@ public class AndroidUtility extends JFrame {
         fileNameLabel.setBounds(50, 120, 100, 30);
         recordingFrame.add(fileNameLabel);
 
-        fileNameField = new JTextField("android_screen_record");
+        fileNameField = new JTextField("ios_screen_record");
         fileNameField.setBounds(150, 120, 200, 30);
         recordingFrame.add(fileNameField);
 
@@ -227,13 +188,13 @@ public class AndroidUtility extends JFrame {
         recordingFrame.add(savedLocationLabel);
 
         startRecordButton.addActionListener(e -> {
-            ADBHelper.startAndroidScreenRecording(fileNameField.getText());
+            XcrunHelper.startiOSScreenRecording(fileNameField.getText(), fileLocationField.getText());
             startRecordButton.setEnabled(false);
             stopRecordButton.setEnabled(true);
         });
 
         stopRecordButton.addActionListener(e -> {
-            ADBHelper.stopAndroidScreenRecording(fileNameField.getText(), fileLocationField.getText(), savedLocationLabel);
+            XcrunHelper.stopiOSScreenRecording();
             startRecordButton.setEnabled(true);
             stopRecordButton.setEnabled(false);
         });
@@ -251,15 +212,9 @@ public class AndroidUtility extends JFrame {
         this.mainAppFrame = mainAppFrame;
     }
 
-    // Method to go back to the main app
+    // Method to return to main app
     private void goBackToMainApp() {
-        if (mainAppFrame != null) {
-            mainAppFrame.setVisible(true);
-        }
+        mainAppFrame.setVisible(true);
         dispose();
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(AndroidUtility::new);
     }
 }

@@ -8,8 +8,8 @@ public class QEUtilityApp {
 
     public QEUtilityApp() {
         // Initialize the main frame
-        frame = new JFrame("QE Utility App");
-        frame.setSize(400, 200);
+        frame = new JFrame("QE Utility Appp");
+        frame.setSize(400, 300);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(null);
 
@@ -34,13 +34,14 @@ public class QEUtilityApp {
         iosButton.setFont(interFont);
         iosButton.setBounds(220, 80, 120, 30);
         frame.add(iosButton);
-        iosButton.setEnabled(false);
+        //iosButton.setEnabled(false);
 
         // ActionListener for Android Button
         androidButton.addActionListener(e -> openAndroidUtilityScreen());
 
         // Placeholder ActionListener for iOS Button
-        iosButton.addActionListener(e -> JOptionPane.showMessageDialog(frame, "iOS Utility not implemented yet."));
+        // iosButton.addActionListener(e -> JOptionPane.showMessageDialog(frame, "iOS Utility not implemented yet."));
+        iosButton.addActionListener(e -> openIOSUtilityScreen());
 
         frame.setVisible(true);
     }
@@ -49,6 +50,12 @@ public class QEUtilityApp {
         frame.setVisible(false); // Hide the main frame
         AndroidUtility androidUtility = new AndroidUtility();
         androidUtility.setMainAppFrame(frame); // Pass the main frame to AndroidUtility
+    }
+
+    private void openIOSUtilityScreen() {
+        frame.setVisible(false); // Hide the main frame
+        iOSUtility iosUtility = new iOSUtility();
+        iosUtility.setMainAppFrame(frame); // Pass the main frame to iOSUtilityScreen
     }
 
     public static void main(String[] args) {
