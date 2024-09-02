@@ -1,6 +1,9 @@
 package org.srivi.Trading.QE;
 
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -12,7 +15,6 @@ import java.util.List;
 
 public class ADBHelper {
     private static Process screenRecordProcess;
-    private HelpOptionsPanel helpOptionsPanel;
 
     public static List<String> getConnectedDevices() {
         List<String> devices = new ArrayList<>();
@@ -83,7 +85,7 @@ public class ADBHelper {
                 if (exitCode == 0) {
                     savedLocationLabel.setText("File saved to: " + savePath);
                 } else {
-                    JOptionPane.showMessageDialog(null, "Error pulling file: " + errorOutput.toString());
+                    JOptionPane.showMessageDialog(null, "Error pulling file please connect device: " + errorOutput.toString());
                 }
 
             } else {

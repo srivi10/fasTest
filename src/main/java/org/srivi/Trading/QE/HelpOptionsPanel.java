@@ -21,8 +21,8 @@ public class HelpOptionsPanel extends JPanel {
 
         // Add "Need Help?" Label
         JLabel needHelpLabel = new JLabel("Need Help?");
-        needHelpLabel.setFont(interFont.deriveFont(Font.BOLD, 14f));
-        needHelpLabel.setBounds((panelWidth - 114) / 2, 5, 100, 20);
+        needHelpLabel.setFont(interFont.deriveFont(Font.TRUETYPE_FONT, 14f));
+        needHelpLabel.setBounds((panelWidth - 136) / 2, 5, 100, 20);
         needHelpLabel.setHorizontalAlignment(SwingConstants.CENTER);
         add(needHelpLabel);
 
