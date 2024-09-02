@@ -1,11 +1,11 @@
 package org.srivi.Trading;
 
-import org.srivi.Trading.QE.AccountFetcher;
-import org.srivi.Trading.QE.ExcelUtil;
-import org.srivi.Trading.QE.FontUtil;
+import org.srivi.Trading.QE.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
@@ -13,7 +13,6 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
-import org.srivi.Trading.QE.ADBHelper;
 import java.util.List;
 
 public class AccountSelectionGUI extends JFrame {
@@ -38,6 +37,7 @@ public class AccountSelectionGUI extends JFrame {
     private JTextArea errorTextArea;
 
     private boolean isLoading = false;
+    private HelpOptionsPanel helpOptionsPanel;
 
     public AccountSelectionGUI(JFrame mainAppFrame) {
         this.mainAppFrame = mainAppFrame;
@@ -53,11 +53,11 @@ public class AccountSelectionGUI extends JFrame {
         // Set the custom font
         Font interFont = FontUtil.getInterFont(12f);
 
-        backButton = new JButton("Back");
-        backButton.setBounds(10, 10, 80, 30);
-        backButton.setFont(interFont);
-        backButton.addActionListener(e -> goBackToMainApp());
-        add(backButton);
+        //Font interFont = FontUtil.getInterFont(12f);
+
+        // Use the BackButtonUtil to create and add the back label
+        JLabel backLabel = BackButtonUtil.createBackLabel(this);
+        add(backLabel);
 
         accountHolderComboBox = new JComboBox<>(new String[]{"Single", "Multi"});
         accountTypeComboBox = new JComboBox<>(new String[]{"PCH", "Au"});
@@ -162,7 +162,17 @@ public class AccountSelectionGUI extends JFrame {
         });
 
         resetButton.addActionListener(e -> resetFields());
+        helpOptionsPanel = new HelpOptionsPanel(getWidth(), getHeight());
+        add(helpOptionsPanel);
 
+        // Add ComponentListener to handle resizing
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                // Reposition HelpOptionsPanel
+                helpOptionsPanel.setBounds(0, getHeight() - 100, getWidth(), 100);
+            }
+        });
         setVisible(true);
     }
 

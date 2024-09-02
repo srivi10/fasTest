@@ -71,6 +71,7 @@ public class XcrunHelper {
         try {
             ProcessBuilder processBuilder = new ProcessBuilder("bash", "-c", command);
             recordProcess = processBuilder.start();
+            JOptionPane.showMessageDialog(null, "Recording started.");
             System.out.println("Recording started with HEVC codec.");
         } catch (IOException e) {
             e.printStackTrace();
@@ -78,9 +79,10 @@ public class XcrunHelper {
         }
     }
 
-    public static void stopiOSScreenRecording() {
-
+    public static void stopiOSScreenRecording(String fileName,String fileLocation,JLabel savedLocationLabel) {
+        String savePath = fileLocation + File.separator + fileName + ".mp4";
         if (recordProcess != null) {
+
             String pid = String.valueOf(recordProcess.pid());
             String killCommand = "kill -2 " + pid;
             try {
@@ -98,7 +100,8 @@ public class XcrunHelper {
             Process stopProcess = processBuilder.start();
             stopProcess.waitFor(3, TimeUnit.SECONDS); // Wait up to 3 seconds for the command to complete
             System.out.println("Recording stopped.");
-        } catch (IOException e) {
+            savedLocationLabel.setText("File saved to: " + savePath);
+            } catch (IOException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Error stopping recording: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         } catch (InterruptedException e) {
@@ -106,7 +109,13 @@ public class XcrunHelper {
             Thread.currentThread().interrupt();
             JOptionPane.showMessageDialog(null, "Error stopping recording: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
+
     }
 
+    public static void ENLocale() {
+    }
+
+    public static void FRLocale() {
+    }
 }
 

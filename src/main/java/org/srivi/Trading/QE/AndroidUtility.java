@@ -2,10 +2,7 @@ package org.srivi.Trading.QE;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
+import java.awt.event.*;
 import java.util.List;
 import org.srivi.Trading.AccountSelectionGUI;
 import org.srivi.Trading.QE.ADBHelper;
@@ -15,8 +12,9 @@ public class AndroidUtility extends JFrame {
     private JFrame mainAppFrame;
     private JTextField fileNameField;
     private JTextField fileLocationField;
-    private JLabel savedLocationLabel;
+    public JLabel savedLocationLabel;
     private JLabel deviceStatusLabel;
+    String desktopPath = System.getProperty("user.home") + "/Desktop";
     private HelpOptionsPanel helpOptionsPanel;
         public AndroidUtility() {
         setTitle("Android Utility");
@@ -26,21 +24,30 @@ public class AndroidUtility extends JFrame {
         // Set the custom font
         Font interFont = FontUtil.getInterFont(12f);
 
+            ImageIcon backIcon = new ImageIcon(getClass().getClassLoader().getResource("icons/MasterBackButton.png"));
+            Image scaledBackImage = backIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+            ImageIcon scaledIcon = new ImageIcon(scaledBackImage);
 
+            // Create the back label with icon and text
+            JLabel backLabel = new JLabel("Back", scaledIcon, SwingConstants.LEFT);
+            backLabel.setBounds(10, 10, 100, 30); // Adjust width to fit text and icon
+            backLabel.setFont(FontUtil.getInterFont(14f)); // Set font
+            backLabel.setIconTextGap(5); // Gap between icon and text
+            backLabel.setHorizontalAlignment(SwingConstants.LEFT); // Align text to the left of the icon
+            backLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)); // Change cursor to hand on hover
 
-        // Back button to return to main app
-        JButton backButton = new JButton("Back");
-        backButton.setFont(interFont);
-        backButton.setBounds(10, 10, 80, 30);
-        backButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                goBackToMainApp();
-            }
-        });
-        add(backButton);
+            // Add mouse listener to handle clicks
+            backLabel.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    goBackToMainApp();
+                }
+            });
 
-        // Label for device connection status
+            // Add label to the frame
+            add(backLabel);
+
+            // Label for device connection status
         deviceStatusLabel = new JLabel("Device Connected: Checking...");
         deviceStatusLabel.setFont(interFont);
         deviceStatusLabel.setBounds(50, 50, 300, 30);
@@ -81,9 +88,12 @@ public class AndroidUtility extends JFrame {
                         public void actionPerformed(ActionEvent evt) {
                             iconLabel.setVisible(false);
                         }
+
                     });
                     timer.setRepeats(false); // Make sure the timer only runs once
                     timer.start();
+                    JOptionPane.showMessageDialog(null, "Screenshot saved to Desktop", "Success", JOptionPane.INFORMATION_MESSAGE);
+
                 } else {
                     JOptionPane.showMessageDialog(null, "Failed to take screenshot", "Error", JOptionPane.ERROR_MESSAGE);
                 }
@@ -201,17 +211,11 @@ public class AndroidUtility extends JFrame {
         // Set the custom font
         Font interFont = FontUtil.getInterFont(12f);
 
-        // Back button to return to AndroidUtility view
-        JButton backButton = new JButton("Back");
-        backButton.setBounds(10, 10, 80, 30);
-        backButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                recordingFrame.dispose();
-                setVisible(true);
-            }
-        });
-        recordingFrame.add(backButton);
+        JLabel backLabel = BackButtonUtil.createBackLabel(recordingFrame);
+       // add(backLabel);
+
+// Add the back label to the frame
+        recordingFrame.add(backLabel);
 
         // File Name Label and Field
         JLabel fileNameLabel = new JLabel("File Name:");
@@ -230,7 +234,7 @@ public class AndroidUtility extends JFrame {
         fileLocationLabel.setBounds(50, 120, 100, 30);
         recordingFrame.add(fileLocationLabel);
 
-        fileLocationField = new JTextField();
+        fileLocationField = new JTextField(desktopPath);
         fileLocationField.setBounds(150, 120, 150, 30);
         fileLocationField.setFont(interFont);
         recordingFrame.add(fileLocationField);
@@ -254,12 +258,12 @@ public class AndroidUtility extends JFrame {
         recordingFrame.add(stopRecordButton);
 
         savedLocationLabel = new JLabel("");
-        savedLocationLabel.setBounds(20, 280, 460, 30);
+        savedLocationLabel.setBounds(20, 240, 460, 30);
         savedLocationLabel.setFont(interFont);
         recordingFrame.add(savedLocationLabel);
 
         startRecordButton.addActionListener(e -> {
-            ADBHelper.startAndroidScreenRecording(fileNameField.getText());
+            ADBHelper.startAndroidScreenRecording(fileNameField.getText(), fileLocationField.getText());
             startRecordButton.setEnabled(false);
             stopRecordButton.setEnabled(true);
         });
@@ -271,6 +275,18 @@ public class AndroidUtility extends JFrame {
         });
 
         recordingFrame.setVisible(true);
+
+        helpOptionsPanel = new HelpOptionsPanel(getWidth(), getHeight());
+        recordingFrame.add(helpOptionsPanel);
+
+        // Add ComponentListener to handle resizing
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                // Reposition HelpOptionsPanel
+                helpOptionsPanel.setBounds(0, getHeight() - 100, getWidth(), 100);
+            }
+        });
     }
 
     // Method to open Account Selection GUI

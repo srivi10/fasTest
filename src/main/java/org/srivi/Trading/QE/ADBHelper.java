@@ -12,6 +12,7 @@ import java.util.List;
 
 public class ADBHelper {
     private static Process screenRecordProcess;
+    private HelpOptionsPanel helpOptionsPanel;
 
     public static List<String> getConnectedDevices() {
         List<String> devices = new ArrayList<>();
@@ -32,7 +33,11 @@ public class ADBHelper {
         return devices;
     }
 
-    public static void startAndroidScreenRecording(String fileName) {
+    public static void startAndroidScreenRecording(String fileName, String fileLocation) {
+        if (fileLocation.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Please specify a file location.");
+            return;
+        }
         try {
             ProcessBuilder pb = new ProcessBuilder("adb", "shell", "screenrecord", "--size", "480x854", "--bit-rate", "500000", "/sdcard/" + fileName + ".mp4");
             screenRecordProcess = pb.start();
@@ -53,7 +58,7 @@ public class ADBHelper {
                     return;
                 }
 
-                Thread.sleep(2000);
+                Thread.sleep(1000);
 
                 String savePath = fileLocation + File.separator + fileName + ".mp4";
                 ProcessBuilder pullProcess = new ProcessBuilder("adb", "pull", "/sdcard/" + fileName + ".mp4", savePath);
@@ -76,7 +81,7 @@ public class ADBHelper {
                 int exitCode = process.waitFor();
 
                 if (exitCode == 0) {
-                    savedLocationLabel.setText("File saved at: " + savePath);
+                    savedLocationLabel.setText("File saved to: " + savePath);
                 } else {
                     JOptionPane.showMessageDialog(null, "Error pulling file: " + errorOutput.toString());
                 }
