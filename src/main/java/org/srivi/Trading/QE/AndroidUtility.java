@@ -3,6 +3,7 @@ package org.srivi.Trading.QE;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
 import java.util.List;
 import org.srivi.Trading.AccountSelectionGUI;
 
@@ -13,6 +14,8 @@ public class AndroidUtility extends JFrame {
     private JTextField fileLocationField;
     public JLabel savedLocationLabel;
     private JLabel deviceStatusLabel;
+    private JLabel scanningIconLabel;
+    private JLabel scanningLabel;
     String desktopPath = System.getProperty("user.home") + "/Desktop";
     private HelpOptionsPanel helpOptionsPanel;
         public AndroidUtility() {
@@ -131,14 +134,44 @@ public class AndroidUtility extends JFrame {
             }
         });
         add(accountFinderButton);
+            scanningIconLabel = new JLabel();
+            ImageIcon scanningIcon = new ImageIcon(getClass().getResource("/icons/Analyze.png"));
+            scanningIconLabel.setIcon(scanningIcon);
+            scanningIconLabel.setVisible(false);
+
+            scanningLabel = new JLabel("Scanning Logs");
+            scanningLabel.setForeground(new Color(0, 122, 255));
+            scanningLabel.setVisible(false);
             // Button for Crash Scan option
             JButton crashScanButton = new JButton("Crash Scan");
+
             crashScanButton.setBounds(50, 210, 130, 30);
+            add(scanningIconLabel).setBounds(250, 185, 45, 40); // Position it above the loadingLabel
+            add(scanningLabel).setBounds(225, 220, 100, 30);
             crashScanButton.setFont(interFont);
             crashScanButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    ADBHelper.crashScan();
+                    // Show the icon and text
+                    scanningIconLabel.setVisible(true);
+                    scanningLabel.setVisible(true);
+                    crashScanButton.setEnabled(false);
+
+                    // Perform the crash scan
+                    Timer timer = new Timer(500, evt -> {
+                        try {
+                            ADBHelper.crashScan();
+                        } catch (InterruptedException | IOException ex) {
+                            throw new RuntimeException(ex);
+                        } finally {
+                            scanningIconLabel.setVisible(false);
+                            scanningLabel.setVisible(false);
+                            crashScanButton.setEnabled(true);
+                            ((Timer) evt.getSource()).stop();  // Stop the timer after the first execution
+                        }
+                    });
+                    timer.setRepeats(false); // Ensure it only executes once
+                    timer.start();
                 }
             });
             add(crashScanButton);

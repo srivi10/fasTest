@@ -4,10 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -183,6 +180,64 @@ public class ADBHelper {
     }
 
 
-    public static void crashScan() {
+    public static void crashScan() throws InterruptedException, IOException {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String crashFileName = "Android" + timeStamp;
+        String adbPath = "/Library/Android/sdk/platform-tools/adb";
+        //  String savePath = crashFileName;
+        String adbExecutable = System.getProperty("user.home") + adbPath;
+// Define the ADB devices command
+        String adbDevicesCommand = adbExecutable + " logcat -b crash";
+// Create the process builder for ADB devices
+        ProcessBuilder adbProcessBuilder = new ProcessBuilder(adbDevicesCommand.split("\\s+"));
+        adbProcessBuilder.redirectErrorStream(true);
+        String directory = "/Desktop/";
+        String fileType = "_crashed.txt";
+        // String savePath = crashFileName;
+        StringBuilder crashFile = new StringBuilder();
+        crashFile.append(directory).append(crashFileName).append(fileType);
+        File outputFile = new File(System.getProperty("user.home") + crashFile);
+        adbProcessBuilder.redirectOutput(outputFile);
+// Start the ADB devices process
+        Process adbProcess = adbProcessBuilder.start();
+        Thread.sleep(3000);
+        adbProcess.destroy();
+
+        int numLines = 0;
+        try (BufferedReader reader = new BufferedReader(new FileReader(outputFile))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                numLines++;
+                if (numLines >= 3) {
+                    break;
+                }
+            }
+
+            if (numLines >= 3) {
+                ProcessBuilder textEditProcessBuilder = new ProcessBuilder("open", "-e",
+                        outputFile.getAbsolutePath());
+                textEditProcessBuilder.start();
+                ImageIcon customIcon = new ImageIcon(XcrunHelper.class.getResource("/icons/Caution.png"));
+
+                JOptionPane.showMessageDialog(null,
+                        "Crash Found" + "  " + "File saved to: " + crashFile,
+                        "Crash Scan",
+                        JOptionPane.INFORMATION_MESSAGE,
+                        customIcon);
+
+            } else {
+                ProcessBuilder textEditProcessBuilder = new ProcessBuilder("rm",
+                        outputFile.getAbsolutePath());
+                textEditProcessBuilder.start();
+                ImageIcon customIcon = new ImageIcon(XcrunHelper.class.getResource("/icons/Safe.png"));
+
+                JOptionPane.showMessageDialog(null,
+                        "No Crash Found",
+                        "Crash Scan",
+                        JOptionPane.INFORMATION_MESSAGE,
+                        customIcon);
+
+            }
+        }
     }
 }
