@@ -118,7 +118,7 @@ public class XcrunHelper {
 
             //JOptionPane.showMessageDialog(null, "Recording started.");
             JOptionPane.showMessageDialog( null,
-                    "Recording Stopped" +" + " +"File saved to: " + savePath,
+                    "Recording Stopped" +"  " +"File saved to: " + savePath,
                     "Success",
                     JOptionPane.INFORMATION_MESSAGE,
                     customIcon);

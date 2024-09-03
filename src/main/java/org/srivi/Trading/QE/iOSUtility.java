@@ -94,13 +94,14 @@ public class iOSUtility extends JFrame {
         screenshotButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                iconLabel.setVisible(true);
                 boolean success = XcrunHelper.takeScreenshot();
                 if (success) {
                     // Show the icon
-                    iconLabel.setVisible(true);
+                   // iconLabel.setVisible(true);
 
                     // Create a Timer to hide the icon after 2 seconds
-                    Timer timer = new Timer(2000, new ActionListener() {
+                    Timer timer = new Timer(500, new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent evt) {
                             iconLabel.setVisible(false);
@@ -137,54 +138,6 @@ public class iOSUtility extends JFrame {
             }
         });
         add(accountFinderButton);
-
-//        JLabel localeLabel = new JLabel("Locale:");
-//        localeLabel.setBounds(50, 220, 100, 30);
-//        localeLabel.setFont(interFont);
-//        add(localeLabel);
-//
-//        ImageIcon enLocaleIcon = new ImageIcon(getClass().getClassLoader().getResource("icons/US_Locale.png"));
-//        Image scaledEnImage = enLocaleIcon.getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH);
-//        ImageIcon scaledEnIcon = new ImageIcon(scaledEnImage);
-//        JLabel enLocaleLabel = new JLabel(scaledEnIcon);
-//        enLocaleLabel.setBounds(100, 220, 30, 30); // Adjust the position and size as needed
-//        enLocaleLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-//
-//// Add a click listener for EN Locale
-//        enLocaleLabel.addMouseListener(new MouseAdapter() {
-//            @Override
-//            public void mouseClicked(MouseEvent e) {
-//                XcrunHelper.ENLocale(); // Call the method in XcrunHelper
-//            }
-//        });
-//
-//// FR Locale Icon
-//        ImageIcon frLocaleIcon = new ImageIcon(getClass().getClassLoader().getResource("icons/FR_Locale.png"));
-//        Image scaledFrImage = frLocaleIcon.getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH);
-//        ImageIcon scaledFrIcon = new ImageIcon(scaledFrImage);
-//        JLabel frLocaleLabel = new JLabel(scaledFrIcon);
-//        frLocaleLabel.setBounds(133, 220, 30, 30); // Adjust the position and size as needed
-//        frLocaleLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-//
-//        // Add the labels to the frame
-//        enLocaleLabel.addMouseListener(new MouseAdapter() {
-//            @Override
-//            public void mouseClicked(MouseEvent e) {
-//                XcrunHelper.ENLocale(); // Call the method in XcrunHelper
-//            }
-//        });
-//        // Add a click listener for FR Locale
-//        frLocaleLabel.addMouseListener(new MouseAdapter() {
-//            @Override
-//            public void mouseClicked(MouseEvent e) {
-//                XcrunHelper.FRLocale(); // Call the method in XcrunHelper
-//            }
-//        });
-
-// Add the labels to the frame
-//        add(enLocaleLabel);
-//        add(frLocaleLabel);
-        // Update the device status
         updateDeviceStatus();
 
         setVisible(true);
