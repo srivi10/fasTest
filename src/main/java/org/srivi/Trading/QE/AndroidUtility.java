@@ -20,6 +20,7 @@ public class AndroidUtility extends JFrame {
         setSize(400, 400);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(null);
+        setResizable(false);
         // Set the custom font
         Font interFont = FontUtil.getInterFont(12f);
 
@@ -91,7 +92,13 @@ public class AndroidUtility extends JFrame {
                     });
                     timer.setRepeats(false); // Make sure the timer only runs once
                     timer.start();
-                    JOptionPane.showMessageDialog(null, "Screenshot saved to Desktop", "Success", JOptionPane.INFORMATION_MESSAGE);
+                    ImageIcon customIcon = new ImageIcon(AndroidUtility.class.getResource("/icons/Screencap.png"));
+
+                    JOptionPane.showMessageDialog( null,
+                            "Screenshot saved to Desktop",
+                            "Success",
+                            JOptionPane.INFORMATION_MESSAGE,
+                            customIcon);
 
                 } else {
                     JOptionPane.showMessageDialog(null, "Failed to take screenshot", "Error", JOptionPane.ERROR_MESSAGE);
@@ -124,11 +131,23 @@ public class AndroidUtility extends JFrame {
             }
         });
         add(accountFinderButton);
+            // Button for Crash Scan option
+            JButton crashScanButton = new JButton("Crash Scan");
+            crashScanButton.setBounds(50, 210, 130, 30);
+            crashScanButton.setFont(interFont);
+            crashScanButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    ADBHelper.crashScan();
+                }
+            });
+            add(crashScanButton);
+
 // --- Wi-Fi Control Buttons ---
         JLabel wifiLabel = new JLabel("Wi-Fi Control :");
       //  wifiLabel.setFont(interFont.deriveFont(12f));
         wifiLabel.setFont(interFont);
-        wifiLabel.setBounds(50, 210, 200, 30);
+        wifiLabel.setBounds(50, 250, 200, 30);
         add(wifiLabel);
 
         // Wi-Fi On Button
@@ -136,7 +155,7 @@ public class AndroidUtility extends JFrame {
         Image scaledOnImage = wifiOnIcon.getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH);
         JButton wifiOnButton = new JButton(new ImageIcon(scaledOnImage));
         wifiOnButton.setToolTipText("Turn Wi-Fi On");
-        wifiOnButton.setBounds(150, 205, 35, 40);
+        wifiOnButton.setBounds(150, 245, 35, 40);
         wifiOnButton.setBorderPainted(false);
         wifiOnButton.setContentAreaFilled(false);
         wifiOnButton.setFocusPainted(false);
@@ -148,7 +167,7 @@ public class AndroidUtility extends JFrame {
         Image scaledOffImage = wifiOffIcon.getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH);
         JButton wifiOffButton = new JButton(new ImageIcon(scaledOffImage));
         wifiOffButton.setToolTipText("Turn Wi-Fi Off");
-        wifiOffButton.setBounds(190, 205, 35, 40);
+        wifiOffButton.setBounds(190, 245, 35, 40);
         wifiOffButton.setBorderPainted(false);
         wifiOffButton.setContentAreaFilled(false);
         wifiOffButton.setFocusPainted(false);

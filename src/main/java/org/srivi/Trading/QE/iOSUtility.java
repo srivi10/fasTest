@@ -19,9 +19,10 @@ public class iOSUtility extends JFrame {
 
     public iOSUtility() {
         setTitle("iOS Utility");
-        setSize(400, 400);
+        setSize(400, 350);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(null);
+        setResizable(false);
         // Set the custom font
         Font interFont = FontUtil.getInterFont(12f);
 
@@ -58,6 +59,7 @@ public class iOSUtility extends JFrame {
 
         // Warning Label
         JLabel warningLabel = new JLabel("Supported Device Type: Simulator", new ImageIcon(scaledWarningIcon), JLabel.LEFT);
+        warningLabel.setToolTipText("Physical Device is not supported");
         warningLabel.setBounds(170, 20, 300, 20);
         warningLabel.setFont(interFont);
         add(warningLabel);

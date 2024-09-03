@@ -21,7 +21,7 @@ public class QEUtilityApp {
         addHeaderBanner(frame);
 
         // Set the custom font
-        Font interFont = FontUtil.getInterFont(12f);
+        Font interFont = FontUtil.getInterFont(13f);
 
         // Label for device selection
         JLabel selectDeviceLabel = new JLabel("Select Device:");
@@ -92,11 +92,11 @@ public class QEUtilityApp {
         headerLabel.setForeground(Color.WHITE);
 
         // Set custom font for "fas"
-        Font interFont = FontUtil.getInterFont(18f);
-        Font boldFont = interFont.deriveFont(Font.BOLD);
+        Font interFont = FontUtil.getInterFont(24f);
 
         headerLabel.setFont(interFont);
-        headerLabel.setText("<html><span style='font-size:18px;'>Fas</span><span style='font-weight:italic;font-size:18px;'>Test</span></html>");
+       // headerLabel.setText("<html><span style='font-size:18px;'>fas</span><span style='font-weight:bold;font-size:18px;'>Test</span></html>");
+        headerLabel.setText("fas" + "'Test");
 
         headerPanel.add(headerLabel);
         frame.add(headerPanel);

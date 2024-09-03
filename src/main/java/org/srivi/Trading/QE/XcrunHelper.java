@@ -30,7 +30,13 @@ public class XcrunHelper {
             moveScreenshotProcess.waitFor(); // Wait for the process to complete
 
             // The file is automatically removed from the simulator after moving to the Desktop
+            ImageIcon customIcon = new ImageIcon(XcrunHelper.class.getResource("/icons/Screencap.png"));
 
+            JOptionPane.showMessageDialog( null,
+                    "Screenshot saved to Desktop",
+                    "Success",
+                    JOptionPane.INFORMATION_MESSAGE,
+                    customIcon);
             return true; // Return true if all commands executed successfully
 
         } catch (IOException | InterruptedException e) {
@@ -71,7 +77,15 @@ public class XcrunHelper {
         try {
             ProcessBuilder processBuilder = new ProcessBuilder("bash", "-c", command);
             recordProcess = processBuilder.start();
-            JOptionPane.showMessageDialog(null, "Recording started.");
+            ImageIcon customIcon = new ImageIcon(XcrunHelper.class.getResource("/icons/VideoIcon.png"));
+
+            //JOptionPane.showMessageDialog(null, "Recording started.");
+            JOptionPane.showMessageDialog( null,
+                    "Recording Started",
+                    "",
+                    JOptionPane.INFORMATION_MESSAGE,
+                    customIcon);
+
             System.out.println("Recording started with HEVC codec.");
         } catch (IOException e) {
             e.printStackTrace();
@@ -100,7 +114,15 @@ public class XcrunHelper {
             Process stopProcess = processBuilder.start();
             stopProcess.waitFor(3, TimeUnit.SECONDS); // Wait up to 3 seconds for the command to complete
             System.out.println("Recording stopped.");
-            savedLocationLabel.setText("File saved to: " + savePath);
+            ImageIcon customIcon = new ImageIcon(XcrunHelper.class.getResource("/icons/VideoIcon.png"));
+
+            //JOptionPane.showMessageDialog(null, "Recording started.");
+            JOptionPane.showMessageDialog( null,
+                    "Recording Stopped" +" + " +"File saved to: " + savePath,
+                    "Success",
+                    JOptionPane.INFORMATION_MESSAGE,
+                    customIcon);
+           // savedLocationLabel.setText("File saved to: " + savePath);
             } catch (IOException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Error stopping recording: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);

@@ -34,6 +34,7 @@ public class AccountSelectionGUI extends JFrame {
     private JCheckBox offersCheckBox;
     private JCheckBox paymentPlanCheckBox;
     private JLabel loadingLabel;
+    private JLabel loadingIconLabel;
     private JTextArea errorTextArea;
 
     private boolean isLoading = false;
@@ -46,9 +47,10 @@ public class AccountSelectionGUI extends JFrame {
 
     private void setupUI() {
         setTitle("Account Selection");
-        setSize(700, 700);
+        setSize(600, 700);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(null);
+        setResizable(false);
 
         // Set the custom font
         Font interFont = FontUtil.getInterFont(12f);
@@ -76,8 +78,13 @@ public class AccountSelectionGUI extends JFrame {
         offersCheckBox = new JCheckBox();
         paymentPlanCheckBox = new JCheckBox();
 
+        loadingIconLabel = new JLabel();
+        ImageIcon loadingIcon = new ImageIcon(getClass().getResource("/icons/MasterLoading.png"));
+        loadingIconLabel.setIcon(loadingIcon);
+        loadingIconLabel.setVisible(false);
+
         loadingLabel = new JLabel("Loading...");
-        loadingLabel.setForeground(Color.GREEN);
+        loadingLabel.setForeground(new Color(0, 122, 255));
         loadingLabel.setVisible(false);
 
         errorTextArea = new JTextArea();
@@ -139,6 +146,7 @@ public class AccountSelectionGUI extends JFrame {
         add(offersCheckBox).setBounds(320, 460, 30, 30);
         add(new JLabel("Payment Plan")).setBounds(370, 460, 120, 30);
         add(paymentPlanCheckBox).setBounds(490, 460, 30, 30);
+        add(loadingIconLabel).setBounds(450, 250, 45, 40); // Position it above the loadingLabel
 
         add(loadingLabel).setBounds(450, 300, 100, 30);
         add(errorTextArea).setBounds(20, 500, 380, 40);
@@ -152,10 +160,12 @@ public class AccountSelectionGUI extends JFrame {
             clearTextFieldsAndCheckBoxes();
 
             // Show loading label and fetch accounts after delay
+            loadingIconLabel.setVisible(true);
             loadingLabel.setVisible(true);
             submitButton.setEnabled(false);
             new Timer(1000, evt -> {
                 fetchAndDisplayAccounts();
+                loadingIconLabel.setVisible(false);
                 loadingLabel.setVisible(false);
                 submitButton.setEnabled(true);
             }).start();

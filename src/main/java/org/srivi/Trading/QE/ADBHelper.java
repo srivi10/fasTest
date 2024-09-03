@@ -43,8 +43,14 @@ public class ADBHelper {
         try {
             ProcessBuilder pb = new ProcessBuilder("adb", "shell", "screenrecord", "--size", "480x854", "--bit-rate", "500000", "/sdcard/" + fileName + ".mp4");
             screenRecordProcess = pb.start();
-            JOptionPane.showMessageDialog(null, "Recording started.");
-        } catch (IOException ex) {
+            ImageIcon customIcon = new ImageIcon(XcrunHelper.class.getResource("/icons/VideoIcon.png"));
+
+            JOptionPane.showMessageDialog( null,
+                    "Recording started.",
+                    "Success",
+                    JOptionPane.INFORMATION_MESSAGE,
+                    customIcon);
+                    } catch (IOException ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(null, "Failed to start screen recording: " + ex.getMessage());
         }
@@ -83,7 +89,14 @@ public class ADBHelper {
                 int exitCode = process.waitFor();
 
                 if (exitCode == 0) {
-                    savedLocationLabel.setText("File saved to: " + savePath);
+                   // savedLocationLabel.setText("File saved to: " + savePath);
+                    ImageIcon customIcon = new ImageIcon(XcrunHelper.class.getResource("/icons/VideoIcon.png"));
+
+                    JOptionPane.showMessageDialog( null,
+                            "Recording Stopped" +"  " +"File saved to: " + savePath,
+                            "Success",
+                            JOptionPane.INFORMATION_MESSAGE,
+                            customIcon);
                 } else {
                     JOptionPane.showMessageDialog(null, "Error pulling file please connect device: " + errorOutput.toString());
                 }
@@ -170,4 +183,6 @@ public class ADBHelper {
     }
 
 
+    public static void crashScan() {
+    }
 }

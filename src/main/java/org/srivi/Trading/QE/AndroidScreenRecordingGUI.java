@@ -23,6 +23,7 @@ public class AndroidScreenRecordingGUI extends  JFrame{
         recordingFrame.setSize(500, 400);
         recordingFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         recordingFrame.setLayout(null);
+        recordingFrame.setResizable(false);
         // Set the custom font
         Font interFont = FontUtil.getInterFont(12f);
 
