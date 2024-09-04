@@ -10,6 +10,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -150,6 +152,33 @@ public class AccountSelectionGUI extends JFrame {
 
         add(loadingLabel).setBounds(450, 300, 100, 30);
         add(errorTextArea).setBounds(20, 500, 380, 40);
+
+        ImageIcon addAccountIcon = new ImageIcon(getClass().getResource("/icons/AddAccount1.png"));
+
+        // Scale the image
+        Image scaledImage = addAccountIcon.getImage().getScaledInstance(35, 35, Image.SCALE_SMOOTH);
+
+        // Create a new ImageIcon from the scaled image
+        ImageIcon smoothIcon = new ImageIcon(scaledImage);
+
+        // Create a JLabel with the smoothed icon
+        JLabel iconLabel = new JLabel(smoothIcon);
+        iconLabel.setBounds(410, 505, 35, 35); // Position and size of the icon
+        iconLabel.setToolTipText("Click here to request for Adding Accounts"); // Add tooltip
+        add(iconLabel);
+
+        // Add mouse listener to the icon
+        iconLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                try {
+                    // Open the URL in Safari
+                    Desktop.getDesktop().browse(new URI("https://www.google.com"));
+                } catch (IOException | URISyntaxException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
 
         submitButton.addActionListener(e -> {
             if (isLoading) return;  // Prevent action if loading is already active
