@@ -12,11 +12,15 @@ import java.util.List;
 
 public class ADBHelper {
     private static Process screenRecordProcess;
+    public static String adbPath = "/Library/Android/sdk/platform-tools/adb";
+    public static String adbExecutable = System.getProperty("user.home") + adbPath;
 
     public static List<String> getConnectedDevices() {
         List<String> devices = new ArrayList<>();
+
         try {
-            ProcessBuilder pb = new ProcessBuilder("adb", "devices");
+            // Use adbExecutable instead of just "adb"
+            ProcessBuilder pb = new ProcessBuilder(adbExecutable, "devices");
             Process process = pb.start();
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
             String line;
@@ -25,35 +29,44 @@ public class ADBHelper {
                     devices.add(line.split("\t")[0]);
                 }
             }
-        } catch (IOException e) {
+            process.waitFor();
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Failed to retrieve device list: " + e.getMessage());
         }
+
         return devices;
     }
+
 
     public static void startAndroidScreenRecording(String fileName, String fileLocation) {
         if (fileLocation.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Please specify a file location.");
             return;
         }
-        try {
-            ProcessBuilder pb = new ProcessBuilder("adb", "shell", "screenrecord", "--size", "480x854", "--bit-rate", "500000", "/sdcard/" + fileName + ".mp4");
-            screenRecordProcess = pb.start();
-            ImageIcon customIcon = new ImageIcon(XcrunHelper.class.getResource("/icons/VideoIcon.png"));
 
-            JOptionPane.showMessageDialog( null,
+        try {
+            ProcessBuilder pb = new ProcessBuilder(adbExecutable, "shell", "screenrecord",
+                    "--size", "480x854", "--bit-rate", "500000",
+                    "/sdcard/" + fileName + ".mp4");
+            screenRecordProcess = pb.start();
+
+            ImageIcon customIcon = new ImageIcon(ADBHelper.class.getResource("/icons/VideoIcon.png"));
+            JOptionPane.showMessageDialog(null,
                     "Recording started.",
                     "Success",
                     JOptionPane.INFORMATION_MESSAGE,
                     customIcon);
-                    } catch (IOException ex) {
+
+        } catch (IOException ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(null, "Failed to start screen recording: " + ex.getMessage());
         }
     }
 
     public static void stopAndroidScreenRecording(String fileName, String fileLocation, JLabel savedLocationLabel) {
+
+
         try {
             if (screenRecordProcess != null) {
                 screenRecordProcess.destroy();
@@ -66,7 +79,7 @@ public class ADBHelper {
                 Thread.sleep(1000);
 
                 String savePath = fileLocation + File.separator + fileName + ".mp4";
-                ProcessBuilder pullProcess = new ProcessBuilder("adb", "pull", "/sdcard/" + fileName + ".mp4", savePath);
+                ProcessBuilder pullProcess = new ProcessBuilder(adbExecutable, "pull", "/sdcard/" + fileName + ".mp4", savePath);
                 Process process = pullProcess.start();
 
                 BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
@@ -86,16 +99,14 @@ public class ADBHelper {
                 int exitCode = process.waitFor();
 
                 if (exitCode == 0) {
-                   // savedLocationLabel.setText("File saved to: " + savePath);
                     ImageIcon customIcon = new ImageIcon(XcrunHelper.class.getResource("/icons/VideoIcon.png"));
-
-                    JOptionPane.showMessageDialog( null,
-                            "Recording Stopped" +"  " +"File saved to: " + savePath,
+                    JOptionPane.showMessageDialog(null,
+                            "Recording Stopped" + "  " + "File saved to: " + savePath,
                             "Success",
                             JOptionPane.INFORMATION_MESSAGE,
                             customIcon);
                 } else {
-                    JOptionPane.showMessageDialog(null, "Error pulling file please connect device: " + errorOutput.toString());
+                    JOptionPane.showMessageDialog(null, "Error pulling file, please connect device: " + errorOutput.toString());
                 }
 
             } else {
@@ -107,6 +118,8 @@ public class ADBHelper {
         }
     }
 
+
+
     // Method to take a screenshot, pull it to the Desktop, and delete it from the device
     public static boolean takeScreenshot() {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -117,17 +130,17 @@ public class ADBHelper {
 
         try {
             // Step 1: Take screenshot and save it to the device
-            ProcessBuilder takeScreenshot = new ProcessBuilder("adb", "shell", "screencap", "-p", "/sdcard/" + fileName + ".png");
+            ProcessBuilder takeScreenshot = new ProcessBuilder(adbExecutable, "shell", "screencap", "-p", "/sdcard/" + fileName + ".png");
             Process takeScreenshotProcess = takeScreenshot.start();
             takeScreenshotProcess.waitFor(); // Wait for the process to complete
 
             // Step 2: Pull the screenshot from the device to the Desktop
-            ProcessBuilder pullScreenshot = new ProcessBuilder("adb", "pull", "/sdcard/" + fileName + ".png", savePath);
+            ProcessBuilder pullScreenshot = new ProcessBuilder(adbExecutable, "pull", "/sdcard/" + fileName + ".png", savePath);
             Process pullScreenshotProcess = pullScreenshot.start();
             pullScreenshotProcess.waitFor(); // Wait for the process to complete
 
             // Step 3: Delete the screenshot from the device
-            ProcessBuilder deleteScreenshot = new ProcessBuilder("adb", "shell", "rm", "/sdcard/" + fileName + ".png");
+            ProcessBuilder deleteScreenshot = new ProcessBuilder(adbExecutable, "shell", "rm", "/sdcard/" + fileName + ".png");
             Process deleteScreenshotProcess = deleteScreenshot.start();
             deleteScreenshotProcess.waitFor(); // Wait for the process to complete
 
@@ -139,21 +152,24 @@ public class ADBHelper {
         }
     }
 
+
     public static void passTextToEmulator(String text) {
+
         try {
             // Pass the text to the adb shell input text command
-            String command = "adb shell input text \"" + text + "\"";
-            Process processInputText = Runtime.getRuntime().exec(command);
-            processInputText.waitFor();
+            ProcessBuilder processInputText = new ProcessBuilder(adbExecutable, "shell", "input", "text", text);
+            Process process = processInputText.start();
+            process.waitFor();
 
             // Pass the adb shell input keyevent KEYCODE_TAB command
-            String commandKeyEventTab = "adb shell input keyevent KEYCODE_TAB";
-            Process processKeyEventTab = Runtime.getRuntime().exec(commandKeyEventTab);
-            processKeyEventTab.waitFor();
+            ProcessBuilder processKeyEventTab = new ProcessBuilder(adbExecutable, "shell", "input", "keyevent", "KEYCODE_TAB");
+            Process processTab = processKeyEventTab.start();
+            processTab.waitFor();
         } catch (IOException | InterruptedException ex) {
             ex.printStackTrace();
         }
     }
+
     public static void enableWifi() {
         String command = "svc wifi enable";
         runADBCommand(command);
@@ -165,7 +181,8 @@ public class ADBHelper {
     }
 
     private static void runADBCommand(String command) {
-        ProcessBuilder processBuilder = new ProcessBuilder("adb", "shell", command);
+          ProcessBuilder processBuilder = new ProcessBuilder(adbExecutable, "shell", command);
+
         try {
             Process process = processBuilder.start();
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
@@ -183,9 +200,9 @@ public class ADBHelper {
     public static void crashScan() throws InterruptedException, IOException {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String crashFileName = "Android" + timeStamp;
-        String adbPath = "/Library/Android/sdk/platform-tools/adb";
-        //  String savePath = crashFileName;
-        String adbExecutable = System.getProperty("user.home") + adbPath;
+//        String adbPath = "/Library/Android/sdk/platform-tools/adb";
+//        //  String savePath = crashFileName;
+//        String adbExecutable = System.getProperty("user.home") + adbPath;
 // Define the ADB devices command
         String adbDevicesCommand = adbExecutable + " logcat -b crash";
 // Create the process builder for ADB devices
