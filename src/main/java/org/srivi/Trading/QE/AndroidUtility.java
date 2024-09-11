@@ -16,6 +16,11 @@ public class AndroidUtility extends JFrame {
     private JLabel deviceStatusLabel;
     private JLabel scanningIconLabel;
     private JLabel scanningLabel;
+    private JButton screenshotButton;
+    private JButton screenRecordingButton;
+    private JButton crashScanButton;
+    private JButton wifiOnButton;
+    private JButton wifiOffButton;
     String desktopPath = System.getProperty("user.home") + "/Desktop";
     private HelpOptionsPanel helpOptionsPanel;
         public AndroidUtility() {
@@ -57,7 +62,7 @@ public class AndroidUtility extends JFrame {
         add(deviceStatusLabel);
 
         // Button for Take Screenshot option
-        JButton screenshotButton = new JButton("Take Screenshot");
+        screenshotButton = new JButton("Take Screenshot");
         screenshotButton.setFont(interFont);
         screenshotButton.setBounds(50, 90, 130, 30);
         screenshotButton.setEnabled(true); // Disable for now, enable when the function is implemented
@@ -112,7 +117,7 @@ public class AndroidUtility extends JFrame {
 
 
         // Button for Screen Recording option
-        JButton screenRecordingButton = new JButton("Screen Recording");
+        screenRecordingButton = new JButton("Screen Recording");
         screenRecordingButton.setFont(interFont);
         screenRecordingButton.setBounds(50, 130, 130, 30);
         screenRecordingButton.addActionListener(new ActionListener() {
@@ -143,7 +148,7 @@ public class AndroidUtility extends JFrame {
             scanningLabel.setForeground(new Color(0, 122, 255));
             scanningLabel.setVisible(false);
             // Button for Crash Scan option
-            JButton crashScanButton = new JButton("Crash Scan");
+            crashScanButton = new JButton("Crash Scan");
 
             crashScanButton.setBounds(50, 210, 130, 30);
             add(scanningIconLabel).setBounds(250, 185, 45, 40); // Position it above the loadingLabel
@@ -186,7 +191,7 @@ public class AndroidUtility extends JFrame {
         // Wi-Fi On Button
         ImageIcon wifiOnIcon = new ImageIcon(getClass().getClassLoader().getResource("icons/WifiOn.png"));
         Image scaledOnImage = wifiOnIcon.getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH);
-        JButton wifiOnButton = new JButton(new ImageIcon(scaledOnImage));
+        wifiOnButton = new JButton(new ImageIcon(scaledOnImage));
         wifiOnButton.setToolTipText("Turn Wi-Fi On");
         wifiOnButton.setBounds(150, 245, 35, 40);
         wifiOnButton.setBorderPainted(false);
@@ -198,7 +203,7 @@ public class AndroidUtility extends JFrame {
 // Wi-Fi Off Button
         ImageIcon wifiOffIcon = new ImageIcon(getClass().getClassLoader().getResource("icons/WifiOff.png"));
         Image scaledOffImage = wifiOffIcon.getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH);
-        JButton wifiOffButton = new JButton(new ImageIcon(scaledOffImage));
+        wifiOffButton = new JButton(new ImageIcon(scaledOffImage));
         wifiOffButton.setToolTipText("Turn Wi-Fi Off");
         wifiOffButton.setBounds(190, 245, 35, 40);
         wifiOffButton.setBorderPainted(false);
@@ -251,6 +256,13 @@ public class AndroidUtility extends JFrame {
         List<String> devices = ADBHelper.getConnectedDevices();
         String statusText = devices.isEmpty() ? "No devices connected." : "Connected Devices: " + String.join(", ", devices);
         deviceStatusLabel.setText(statusText);
+        boolean devicesConnected = !devices.isEmpty();
+        // Enable or disable buttons based on device status
+        screenshotButton.setEnabled(devicesConnected);
+        screenRecordingButton.setEnabled(devicesConnected);
+        crashScanButton.setEnabled(devicesConnected);
+        wifiOnButton.setEnabled(devicesConnected);
+        wifiOffButton.setEnabled(devicesConnected);
     }
 
     // Method to open Account Selection GUI

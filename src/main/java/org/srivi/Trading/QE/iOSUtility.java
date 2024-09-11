@@ -15,6 +15,8 @@ public class iOSUtility extends JFrame {
     private JLabel savedLocationLabel;
     private JLabel deviceStatusLabel;
     private HelpOptionsPanel helpOptionsPanel;
+    private JButton screenshotButton;
+    private JButton screenRecordingButton;
     String desktopPath = System.getProperty("user.home") + "/Desktop";
 
     public iOSUtility() {
@@ -71,7 +73,7 @@ public class iOSUtility extends JFrame {
         add(deviceStatusLabel);
 
         // Button for Take Screenshot option
-        JButton screenshotButton = new JButton("Take Screenshot");
+        screenshotButton = new JButton("Take Screenshot");
         screenshotButton.setBounds(50, 100, 130, 30);
         screenshotButton.setFont(interFont);
         screenshotButton.setEnabled(true); // Disable for now, enable when the function is implemented
@@ -116,7 +118,7 @@ public class iOSUtility extends JFrame {
         });
 
         // Button for Screen Recording option
-        JButton screenRecordingButton = new JButton("Screen Recording");
+        screenRecordingButton = new JButton("Screen Recording");
         screenRecordingButton.setBounds(50, 140, 130, 30);
         screenRecordingButton.setFont(interFont);
         screenRecordingButton.addActionListener(new ActionListener() {
@@ -159,6 +161,10 @@ public class iOSUtility extends JFrame {
         List<String> devices = XcrunHelper.getConnectedDevices();
         String statusText = devices.isEmpty() ? "No devices connected." : "Connected Devices: " + String.join(", ", devices);
         deviceStatusLabel.setText(statusText);
+        boolean devicesConnected = !devices.isEmpty();
+        // Enable or disable buttons based on device status
+        screenshotButton.setEnabled(devicesConnected);
+        screenRecordingButton.setEnabled(devicesConnected);
     }
 
 
