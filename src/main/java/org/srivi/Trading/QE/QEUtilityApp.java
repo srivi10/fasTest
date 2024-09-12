@@ -6,6 +6,10 @@ import java.awt.*;
 public class QEUtilityApp {
     private JFrame frame;
     private HelpOptionsPanel helpPanel;
+    private JLabel loadingLabel;       // Label to show loading text
+    private JLabel loadingIconLabel;   // Label to show loading icon
+    private JButton androidButton, iosButton;
+    private JLabel selectDeviceLabel;
 
     public QEUtilityApp() {
         // Initialize the main frame
@@ -24,28 +28,74 @@ public class QEUtilityApp {
         Font interFont = FontUtil.getInterFont(13f);
 
         // Label for device selection
-        JLabel selectDeviceLabel = new JLabel("Select Device:");
+        selectDeviceLabel = new JLabel("Select Device:");
         selectDeviceLabel.setFont(interFont);
         selectDeviceLabel.setBounds(150, 80, 120, 30);
         frame.add(selectDeviceLabel);
 
         // Button for Android option
-        JButton androidButton = new JButton("Android");
+        androidButton = new JButton("Android");
         androidButton.setFont(interFont);
         androidButton.setBounds(50, 130, 120, 30);
         frame.add(androidButton);
 
         // Button for iOS option (Future Implementation)
-        JButton iosButton = new JButton("iOS");
+        iosButton = new JButton("iOS");
         iosButton.setFont(interFont);
         iosButton.setBounds(220, 130, 120, 30);
         frame.add(iosButton);
 
-        // ActionListener for Android Button
-        androidButton.addActionListener(e -> openAndroidUtilityScreen());
+        // Label for the loading icon
+        loadingIconLabel = new JLabel();
+        ImageIcon loadingIcon = new ImageIcon(getClass().getResource("/icons/MasterLoading.png"));
+        loadingIconLabel.setIcon(loadingIcon);
+        loadingIconLabel.setBounds(170, 120, 84, 84);  // Adjust the bounds as needed
+        loadingIconLabel.setVisible(false);  // Hide initially
+        frame.add(loadingIconLabel);
 
-        // Placeholder ActionListener for iOS Button
-        iosButton.addActionListener(e -> openIOSUtilityScreen());
+        // Label for the loading text
+        loadingLabel = new JLabel("Loading...");
+        loadingLabel.setForeground(new Color(0, 122, 255));
+        loadingLabel.setFont(interFont);
+        loadingLabel.setBounds(167, 180, 160, 30);  // Adjust the bounds as needed
+        loadingLabel.setVisible(false);  // Hide initially
+        //frame.add(loadingLabel);
+
+        // ActionListener for Android Button
+        androidButton.addActionListener(e -> {
+            showLoadingMessage("Loading Android Utility...");
+            new SwingWorker<Void, Void>() {
+                @Override
+                protected Void doInBackground() throws Exception {
+                    Thread.sleep(1000); // Simulate delay
+                    return null;
+                }
+
+                @Override
+                protected void done() {
+                    openAndroidUtilityScreen();
+                    hideLoadingMessage();
+                }
+            }.execute();
+        });
+
+        // ActionListener for iOS Button
+        iosButton.addActionListener(e -> {
+            showLoadingMessage("Loading iOS Utility...");
+            new SwingWorker<Void, Void>() {
+                @Override
+                protected Void doInBackground() throws Exception {
+                    Thread.sleep(1000); // Simulate delay
+                    return null;
+                }
+
+                @Override
+                protected void done() {
+                    openIOSUtilityScreen();
+                    hideLoadingMessage();
+                }
+            }.execute();
+        });
 
         // Add HelpOptionsPanel after the frame is visible
         frame.addComponentListener(new java.awt.event.ComponentAdapter() {
@@ -95,7 +145,6 @@ public class QEUtilityApp {
         Font interFont = FontUtil.getInterFont(24f);
 
         headerLabel.setFont(interFont);
-       // headerLabel.setText("<html><span style='font-size:18px;'>fas</span><span style='font-weight:bold;font-size:18px;'>Test</span></html>");
         headerLabel.setText("fas" + "'Test");
 
         headerPanel.add(headerLabel);
@@ -112,6 +161,37 @@ public class QEUtilityApp {
         frame.setVisible(false); // Hide the main frame
         iOSUtility iosUtility = new iOSUtility();
         iosUtility.setMainAppFrame(frame); // Pass the main frame to iOSUtility
+    }
+
+    // Method to show the loading message, icon, and hide buttons
+    private void showLoadingMessage(String message) {
+        loadingLabel.setText(message);
+        loadingLabel.setVisible(true);
+        loadingIconLabel.setVisible(true);
+
+        // Hide buttons and non-heading components
+        androidButton.setVisible(false);
+        iosButton.setVisible(false);
+        selectDeviceLabel.setVisible(false);
+
+        if (helpPanel != null) {
+            helpPanel.setVisible(false);
+        }
+    }
+
+    // Method to hide the loading message and icon, and show buttons
+    private void hideLoadingMessage() {
+        loadingLabel.setVisible(false);
+        loadingIconLabel.setVisible(false);
+
+        // Show buttons and non-heading components again
+        androidButton.setVisible(true);
+        iosButton.setVisible(true);
+        selectDeviceLabel.setVisible(true);
+
+        if (helpPanel != null) {
+            helpPanel.setVisible(true);
+        }
     }
 
     public static void main(String[] args) {
