@@ -134,7 +134,7 @@ public class QEUtilityApp {
                 g2d.fillRect(0, 0, width, height);
             }
         };
-        headerPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        headerPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
         headerPanel.setBounds(0, 0, frame.getWidth(), 40);
 
         // Create the fasTest label with "fas" and "Test" styles
@@ -145,7 +145,7 @@ public class QEUtilityApp {
         Font interFont = FontUtil.getInterFont(24f);
 
         headerLabel.setFont(interFont);
-        headerLabel.setText("fas" + "'Test");
+        headerLabel.setText("fas" + "Test");
 
         headerPanel.add(headerLabel);
         frame.add(headerPanel);
