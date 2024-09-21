@@ -2,6 +2,13 @@ package org.srivi.Trading.QE;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URI;
 
 public class QEUtilityApp {
     private JFrame frame;
@@ -10,6 +17,7 @@ public class QEUtilityApp {
     private JLabel loadingIconLabel;   // Label to show loading icon
     private JButton androidButton, iosButton;
     private JLabel selectDeviceLabel;
+    private JLabel versionLabel;
 
     public QEUtilityApp() {
         // Initialize the main frame
@@ -26,6 +34,8 @@ public class QEUtilityApp {
 
         // Set the custom font
         Font interFont = FontUtil.getInterFont(13f);
+        Font BOLD_FONT = interFont.deriveFont(Font.BOLD);
+        addVersionLabel(frame);
 
         // Label for device selection
         selectDeviceLabel = new JLabel("Select Device:");
@@ -150,6 +160,59 @@ public class QEUtilityApp {
         headerPanel.add(headerLabel);
         frame.add(headerPanel);
     }
+
+    private void addVersionLabel(JFrame frame) {
+        // Load version from file
+        String version = loadVersionFromFile();
+
+        // Create and style the version label
+        versionLabel = new JLabel("Version  " + version);
+        versionLabel.setFont(FontUtil.getInterFont(12f)); // Adjust the font size as needed
+        versionLabel.setForeground(Color.DARK_GRAY);        // Default text color
+        versionLabel.setBounds(315, 40, 150, 30); // Adjust size if needed
+
+        // Set the tooltip text
+        versionLabel.setToolTipText("Click here to download latest fasTest app");
+
+        // Add a mouse listener to handle clicks and color changes
+        versionLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                try {
+                    Desktop.getDesktop().browse(new URI("https://www.google.ca/"));
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                versionLabel.setForeground(new Color(0x007AFF)); // Change to link blue on hover
+
+                versionLabel.setCursor(new Cursor(Cursor.HAND_CURSOR)); // Change cursor to hand
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                versionLabel.setForeground(Color.DARK_GRAY); // Revert to default color
+            }
+        });
+
+        // Add the version label to the frame
+        frame.add(versionLabel);
+    }
+
+    private String loadVersionFromFile() {
+        String version = "1.0.0"; // Default version in case file read fails
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(
+                getClass().getClassLoader().getResourceAsStream("versioning/version.txt")))) {
+            version = reader.readLine();
+        } catch (IOException | NullPointerException e) {
+            System.err.println("Could not read version.txt, defaulting to " + version);
+        }
+        return version;
+    }
+
 
     private void openAndroidUtilityScreen() {
         frame.setVisible(false); // Hide the main frame

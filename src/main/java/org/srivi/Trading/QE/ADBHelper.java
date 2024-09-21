@@ -247,6 +247,9 @@ public class ADBHelper {
                         outputFile.getAbsolutePath());
                 textEditProcessBuilder.start();
                 ImageIcon customIcon = new ImageIcon(XcrunHelper.class.getResource("/icons/Safe.png"));
+                Image img = customIcon.getImage();
+                Image scaledImg = img.getScaledInstance(40, 40, java.awt.Image.SCALE_SMOOTH); // Example size (40x40)
+                customIcon = new ImageIcon(scaledImg);
 
                 JOptionPane.showMessageDialog(null,
                         "No Crash Found",

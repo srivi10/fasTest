@@ -55,6 +55,16 @@ public class AndroidUtility extends JFrame {
             // Add label to the frame
             add(backLabel);
 
+            ImageIcon warningIcon = new ImageIcon(getClass().getClassLoader().getResource("icons/GreenCaution.png"));
+            Image scaledWarningIcon = warningIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+
+            // Warning Label
+            JLabel warningLabel = new JLabel("Device Compatibililty Check", new ImageIcon(scaledWarningIcon), JLabel.LEFT);
+            warningLabel.setToolTipText("Supports Emulator and Physcial Device");
+            warningLabel.setBounds(190, 20, 300, 20);
+            warningLabel.setFont(interFont);
+            add(warningLabel);
+
             // Label for device connection status
         deviceStatusLabel = new JLabel("Device Connected: Checking...");
         deviceStatusLabel.setFont(interFont);
