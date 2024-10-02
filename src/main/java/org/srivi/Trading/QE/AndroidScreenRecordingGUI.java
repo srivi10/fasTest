@@ -90,6 +90,26 @@ public class AndroidScreenRecordingGUI extends  JFrame{
             stopRecordButton.setEnabled(false);
         });
 
+        ImageIcon tipIcon = new ImageIcon(getClass().getClassLoader().getResource("icons/Tips.png"));
+        Image scaledTipIcon = tipIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH); // Scale to 20x20
+        JLabel tipIconLabel = new JLabel(new ImageIcon(scaledTipIcon));
+
+// Set specific coordinates for the icon
+        tipIconLabel.setBounds(5, 225, 50, 50); // X=50, Y=220, width=20, height=20
+        recordingFrame.add(tipIconLabel); // Add icon to the frame
+
+// Create the JTextArea
+        JTextArea infoTextArea = new JTextArea("Use custom file name to avoid overwriting existing files and ensure your recordings are stored for future reference.");
+        infoTextArea.setFont(interFont);
+        infoTextArea.setEditable(false);  // Make it non-editable
+        infoTextArea.setLineWrap(true);  // Allow wrapping of text
+        infoTextArea.setWrapStyleWord(true);
+        infoTextArea.setForeground(Color.DARK_GRAY);
+        infoTextArea.setBackground(UIManager.getColor("Panel.background"));  // Set default background color
+
+// Set specific coordinates for the text area
+        infoTextArea.setBounds(50, 235, 420, 50); // X=80, Y=220 (next to the icon), width=370, height=50
+        recordingFrame.add(infoTextArea); // Add text area to the frame
         recordingFrame.setVisible(true);
 
         helpOptionsPanel = new HelpOptionsPanel(recordingFrame.getWidth(), recordingFrame.getHeight());

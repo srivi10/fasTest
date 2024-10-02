@@ -9,7 +9,7 @@
     <version>${project.version}</version> <!-- Use property for version -->
 
     <properties>
-        <project.version>1.0.3</project.version> <!-- Set a default version -->
+        <project.version>1.0.4</project.version> <!-- Set a default version -->
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -65,7 +65,7 @@
                         <configuration>
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>org.srivi.Trading.QE.QEUtilityApp</mainClass> <!-- Replace with your main class -->
+                                    <mainClass>org.srivi.Trading.QE.fasTest</mainClass> <!-- Replace with your main class -->
                                 </transformer>
                             </transformers>
                         </configuration>

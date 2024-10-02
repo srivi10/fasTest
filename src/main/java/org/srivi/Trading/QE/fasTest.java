@@ -5,12 +5,11 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URI;
 
-public class QEUtilityApp {
+public class fasTest {
     private JFrame frame;
     private HelpOptionsPanel helpPanel;
     private JLabel loadingLabel;       // Label to show loading text
@@ -19,7 +18,7 @@ public class QEUtilityApp {
     private JLabel selectDeviceLabel;
     private JLabel versionLabel;
 
-    public QEUtilityApp() {
+    public fasTest() {
         // Initialize the main frame
         frame = new JFrame("Home");
         frame.setSize(400, 300);
@@ -258,6 +257,6 @@ public class QEUtilityApp {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(QEUtilityApp::new);
+        SwingUtilities.invokeLater(fasTest::new);
     }
 }

@@ -163,7 +163,7 @@ jpackage \
   --input out/artifacts/ProfitCalculator_jar \
   --name ProfitCalculator \
   --main-jar ProfitCalculator-1.0-SNAPSHOT.jar \
-  --main-class org.srivi.Trading.QE.QEUtilityApp \
+  --main-class org.srivi.Trading.QE.fasTest \
   --icon src/main/resources/icons/AppIcon.icns \
   --dest out/macos-app
 For Creating a macOS .pkg File (installer package):
@@ -175,7 +175,7 @@ jpackage \
   --input out/artifacts/ProfitCalculator_jar \
   --name ProfitCalculator \
   --main-jar ProfitCalculator-1.0-SNAPSHOT.jar \
-  --main-class org.srivi.Trading.QE.QEUtilityApp \
+  --main-class org.srivi.Trading.QE.fasTest \
   --icon src/main/resources/icons/AppIcon.icns \
   --dest out/macos-app
 

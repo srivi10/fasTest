@@ -257,6 +257,6 @@ public class BackupQECode {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new org.srivi.Trading.QE.QEUtilityApp());
+        SwingUtilities.invokeLater(() -> new org.srivi.Trading.QE.fasTest());
     }
 }
