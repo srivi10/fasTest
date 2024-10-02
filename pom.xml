@@ -6,9 +6,10 @@
 
     <groupId>org.example</groupId>
     <artifactId>ProfitCalculator</artifactId>
-    <version>1.0</version>
+    <version>${project.version}</version> <!-- Use property for version -->
 
     <properties>
+        <project.version>1.0.3</project.version> <!-- Set a default version -->
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

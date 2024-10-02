@@ -150,6 +150,12 @@ To create a macOS application, you should use the dmg or pkg type instead of mac
 
 For Creating a macOS .dmg File (disk image):
 
+How to build jar
+mvn clean package
+
+
+
+
 bash
 Copy code
 jpackage \

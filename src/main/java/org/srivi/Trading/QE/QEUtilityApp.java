@@ -168,7 +168,7 @@ public class QEUtilityApp {
         // Create and style the version label
         versionLabel = new JLabel("Version  " + version);
         versionLabel.setFont(FontUtil.getInterFont(12f)); // Adjust the font size as needed
-        versionLabel.setForeground(Color.DARK_GRAY);        // Default text color
+        versionLabel.setForeground(Color.BLACK);        // Default text color
         versionLabel.setBounds(315, 40, 150, 30); // Adjust size if needed
 
         // Set the tooltip text
