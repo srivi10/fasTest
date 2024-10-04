@@ -259,15 +259,26 @@ public class AndroidUtility extends JFrame {
 
     }
 
-
-
     // Method to update the device connection status
     public void updateDeviceStatus() {
         List<String> devices = ADBHelper.getConnectedDevices();
-        String statusText = devices.isEmpty() ? "No devices connected." : "Connected Devices: " + String.join(", ", devices);
+
+        // Update status text based on the number of connected devices
+        String statusText;
+        if (devices.isEmpty()) {
+            statusText = "Device Connected: No devices connected !";
+        } else if (devices.size() > 1) {
+            statusText = "Device Connected: More than one Device Connected !";
+        } else {
+            statusText = "Connected Device: " + devices.get(0);  // Show the single connected device
+        }
+
         deviceStatusLabel.setText(statusText);
-        boolean devicesConnected = !devices.isEmpty();
-        // Enable or disable buttons based on device status
+
+        // Only set devicesConnected to true if exactly one device is connected
+        boolean devicesConnected = devices.size() == 1;
+
+        // Enable or disable buttons based on the number of connected devices
         screenshotButton.setEnabled(devicesConnected);
         screenRecordingButton.setEnabled(devicesConnected);
         crashScanButton.setEnabled(devicesConnected);

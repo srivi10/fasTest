@@ -241,3 +241,74 @@ Now navigate to intellij terminal from the root directory run this
 sh src/main/resources/scripts/increment_version.sh
 
 
+
+Presentation
+Slide 1: About fasTest App
+The Tool that transforms mobile testing, making it faster, simpler, and smarter.
+A lightweight application designed with simplicity in mind
+Tailored to streamline testing on Android and iOS platforms.
+Built using Java and native libraries for optimal performance.
+Minimal setup required – start using right out of the box
+Focused on enhancing productivity and streamlining testing workflows
+
+Slide 2: Streamlined Device Management
+Control multiple devices with ease – intuitive handling, simple connectivity, and device status at a glance.
+Core Tools for Android
+	•	Powered by ADB (Android Debug Bridge) interacting with Android Devices
+	•	Supports screen recording, screenshots, Crash Scan ,and Wi-Fi actions
+
+Core Tools for iOS
+	•	Utilizes xcrun and simctl for seamless control of iOS devices
+	•	Supports screen recording, screenshots.
+
+
+Slide 3: Seamless Screen Recording, Simplified
+Record with a click, manage file names effortlessly, and capture vital testing moments without the hassle.
+
+	•	Effortless Recording: Start and stop recordings with just a click.
+	•	File Compatibility: Automatically saves in MP4 format, perfect for Jira uploads.
+	•	Optimized File Sizes: Solves the issue of large MOV files by keeping file sizes compact and usable.
+	•	Convenient Save Location: Recordings are directly saved to your Mac desktop for easy access.
+	•	Device Cleanup: Automatically removes recordings from the device once saved, freeing up space.
+	•	No More Overwrites: Avoid overwriting files with custom naming options.
+
+Slide : 4 Crash Scans – Capturing the Invisible
+
+	•	Critical Insight: Crash logs provide valuable insights for both QE and developers, helping pinpoint exact failures.
+	•	Proactive Detection: Identify app crashes before they escalate, reducing production issues.
+	•	Seamless Integration: With a single click, trigger a crash scan and instantly access the data that matters.
+	•	Instant Feedback: Logs are automatically pulled from the device, showing you what went wrong and where.
+	•	Clean Slate: The crash scan also cleans device logs, ensuring it’s ready to catch new crashes.
+	•	Less Guesswork, More Precision: Enable developers to address specific crashes, speeding up the debug process.
+
+
+	Slide :  5
+
+	Account Finder – Your Gateway to Seamless Management
+
+    	•	The Challenge: Navigating multiple accounts can be cumbersome, leading to confusion and lost time.
+    	•	Central Repository: Our tool maintains a central repository of diverse accounts, ensuring you have quick access when you need it most.
+    	•	Regular Updates: Accounts are regularly checked and updated, providing the most accurate and relevant information at your fingertips.
+    	•	Enhanced Search: Quickly locate specific accounts based on user-defined criteria, saving valuable time and effort.
+    	•	Future-Proofing: Upcoming releases will feature even more unique and complex accounts, further enriching your management capabilities.
+    	•	Simplified Workflow: Eliminate the guesswork and focus on what truly matters – improving your productivity and efficiency.
+
+    Benefits of Account Finder – Why You’ll Love It
+
+    	•	Streamlined Access: Instantly retrieve account details without the hassle of navigating multiple platforms.
+    	•	Time Efficiency: Spend less time searching and more time achieving, thanks to our organized structure.
+    	•	Informed Decisions: With up-to-date information, make informed choices based on current account statuses.
+    	•	Scalability: As your needs grow, our tool evolves, offering more options and features to enhance your experience.
+
+
+
+SLide 6 : Easy Navigation – Your Support Hub
+
+          	•	One-Click Access: Navigate effortlessly to the download link for the latest fasTest Build – keeping your tools up to date with minimal effort.
+          	•	User Guide at Your Fingertips: Access the complete user guide in just one click, ensuring you have all the information you need to maximize the app’s potential.
+          	•	Feature Requests Made Simple: Have a suggestion? Easily submit requests for new features with our dedicated link, allowing your voice to be heard.
+          	•	Support at Your Service: Reach out for help with a straightforward support email option, ensuring you receive assistance when you need it most.
+          	•	Account Requests: Need additional accounts? The app includes placeholders to request new accounts directly, streamlining your account management process.
+
+
+

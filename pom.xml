@@ -9,7 +9,7 @@
     <version>${project.version}</version> <!-- Use property for version -->
 
     <properties>
-        <project.version>1.0.4</project.version> <!-- Set a default version -->
+        <project.version>1.0.5</project.version> <!-- Set a default version -->
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

@@ -200,9 +200,6 @@ public class ADBHelper {
     public static void crashScan() throws InterruptedException, IOException {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String crashFileName = "Android" + timeStamp;
-//        String adbPath = "/Library/Android/sdk/platform-tools/adb";
-//        //  String savePath = crashFileName;
-//        String adbExecutable = System.getProperty("user.home") + adbPath;
 // Define the ADB devices command
         String adbDevicesCommand = adbExecutable + " logcat -b crash";
 // Create the process builder for ADB devices
