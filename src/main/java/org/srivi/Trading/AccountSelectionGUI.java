@@ -39,6 +39,7 @@ public class AccountSelectionGUI extends JFrame {
     private JLabel loadingIconLabel;
     private JTextArea errorTextArea;
 
+
     private boolean isLoading = false;
     private HelpOptionsPanel helpOptionsPanel;
 
@@ -179,6 +180,30 @@ public class AccountSelectionGUI extends JFrame {
                 }
             }
         });
+        JLabel otpLabel = new JLabel("OTP Helper:");
+        //otpLabel.setFont(interFont);
+        otpLabel.setBounds(20, 550, 200, 30);
+        add(otpLabel);
+
+        ImageIcon otpHelperIcon = new ImageIcon(getClass().getClassLoader().getResource("icons/OTP.png"));
+        Image scaledOtpImage = otpHelperIcon.getImage().getScaledInstance(35, 35, Image.SCALE_SMOOTH);
+        JButton otpHelperButton = new JButton(new ImageIcon(scaledOtpImage));
+        otpHelperButton.setToolTipText("Quickly Enter Stub OTP to Android Devices");
+        otpHelperButton.setBounds(100, 545, 35, 40);
+        otpHelperButton.setBorderPainted(false);
+        otpHelperButton.setContentAreaFilled(false);
+        otpHelperButton.setFocusPainted(false);
+        otpHelperButton.setOpaque(false);
+        add(otpHelperButton);
+
+        otpHelperButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                ADBHelper.passTextToEmulator("123456");
+            }
+        });
+
+
 
         submitButton.addActionListener(e -> {
             if (isLoading) return;  // Prevent action if loading is already active

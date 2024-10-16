@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class iOSScreenRecordingView extends JFrame {
     private JFrame mainAppFrame;
@@ -41,6 +43,21 @@ public class iOSScreenRecordingView extends JFrame {
         fileNameField.setFont(interFont);
         fileNameField.setBounds(150, 70, 150, 30);
         recordingFrame.add(fileNameField);
+
+        fileNameField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                char ch = e.getKeyChar();
+                if (Character.isWhitespace(ch)) {
+                    // If the user enters a space, consume the event and show a warning popup
+                    e.consume();
+                    ImageIcon warningIcon = new ImageIcon(getClass().getClassLoader().getResource("icons/Warning.png"));
+
+                    JOptionPane.showMessageDialog(null, "Invalid file name: Use _ instead of space.",
+                            "Invalid FileName", JOptionPane.WARNING_MESSAGE,warningIcon);
+                }
+            }
+        });
 
         // File Location Label and Field
         JLabel fileLocationLabel = new JLabel("File Location:");

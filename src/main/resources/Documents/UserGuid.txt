@@ -243,13 +243,13 @@ sh src/main/resources/scripts/increment_version.sh
 
 
 Presentation
-Slide 1: About fasTest App
-The Tool that transforms mobile testing, making it faster, simpler, and smarter.
-A lightweight application designed with simplicity in mind
-Tailored to streamline testing on Android and iOS platforms.
-Built using Java and native libraries for optimal performance.
-Minimal setup required – start using right out of the box
-Focused on enhancing productivity and streamlining testing workflows
+    Slide 1: About fasTest App
+    The Tool that transforms mobile testing, making it faster, simpler, and smarter.
+    A lightweight application designed with simplicity in mind
+    Tailored to streamline testing on Android and iOS platforms.
+    Built using Java and native libraries for optimal performance.
+    Minimal setup required – start using right out of the box
+    Focused on enhancing productivity and streamlining testing workflows
 
 Slide 2: Streamlined Device Management
 Control multiple devices with ease – intuitive handling, simple connectivity, and device status at a glance.
