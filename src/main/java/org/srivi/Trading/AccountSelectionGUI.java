@@ -38,6 +38,8 @@ public class AccountSelectionGUI extends JFrame {
     private JLabel loadingLabel;
     private JLabel loadingIconLabel;
     private JTextArea errorTextArea;
+    private JComboBox<String> websiteComboBox;
+    private BrowserHelper browserHelper;
 
 
     private boolean isLoading = false;
@@ -50,10 +52,11 @@ public class AccountSelectionGUI extends JFrame {
 
     private void setupUI() {
         setTitle("Account Selection");
-        setSize(600, 700);
+        setSize(600, 800);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(null);
         setResizable(false);
+
 
         // Set the custom font
         Font interFont = FontUtil.getInterFont(12f);
@@ -203,6 +206,85 @@ public class AccountSelectionGUI extends JFrame {
             }
         });
 
+        JLabel launchTextLabel = new JLabel("Launch MBNA Online");
+        launchTextLabel.setBounds(20, 600, 150, 30);
+        add(launchTextLabel);
+
+        ImageIcon cautionIcon = new ImageIcon(getClass().getClassLoader().getResource("icons/Tips.png"));
+        Image scaledCautionImage = cautionIcon.getImage().getScaledInstance(15, 15, Image.SCALE_SMOOTH);
+        ImageIcon scaledCautionIcon = new ImageIcon(scaledCautionImage);
+
+        JLabel cautionIconLabel = new JLabel(scaledCautionIcon);
+        cautionIconLabel.setToolTipText("Select an Account and Launch the Browser");
+        cautionIconLabel.setBounds(145, 590, 35, 35);
+        add(cautionIconLabel);
+
+// Dropdown for website selection
+        websiteComboBox = new JComboBox<>(new String[]{"Google", "Facebook", "YouTube"});
+        websiteComboBox.setBounds(180, 600, 100, 30);
+        add(websiteComboBox);
+
+        ImageIcon chromeIcon = new ImageIcon(getClass().getClassLoader().getResource("icons/ChromeIcon.png"));
+        Image scaledChromeImage = chromeIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        ImageIcon scaledChromeIcon = new ImageIcon(scaledChromeImage);
+
+        JLabel chromeIconLabel = new JLabel(scaledChromeIcon);
+        chromeIconLabel.setToolTipText("Open selected Env in Chrome");
+        chromeIconLabel.setBounds(290, 595, 35, 35);
+        chromeIconLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                // Initialize BrowserHelper with Chrome
+                browserHelper = new BrowserHelper(BrowserHelper.BrowserType.CHROME);
+                String selectedSite = (String) websiteComboBox.getSelectedItem();
+                if (selectedSite != null) {
+                    String url = getUrlForSite(selectedSite);
+                    browserHelper.launchWebsite(url);
+                    browserHelper.inputCredentials(usernameField.getText(), passwordField.getText());
+                }
+            }
+        });
+        add(chromeIconLabel);
+
+// Safari Icon
+        ImageIcon safariIcon = new ImageIcon(getClass().getClassLoader().getResource("icons/SafariIcon.png"));
+        Image scaledSafariImage = safariIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        ImageIcon scaledSafariIcon = new ImageIcon(scaledSafariImage);
+
+        JLabel safariIconLabel = new JLabel(scaledSafariIcon);
+        safariIconLabel.setToolTipText("Open selected Env in Safari");
+        safariIconLabel.setBounds(330, 595, 35, 35); // Position next to Chrome icon
+        safariIconLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                try {
+                    // Initialize BrowserHelper with Safari
+                    browserHelper = new BrowserHelper(BrowserHelper.BrowserType.SAFARI);
+                    String selectedSite = (String) websiteComboBox.getSelectedItem();
+                    if (selectedSite != null) {
+                        String url = getUrlForSite(selectedSite);
+                        browserHelper.launchWebsite(url);
+                        browserHelper.inputCredentials(usernameField.getText(), passwordField.getText());
+                    }
+                } catch (org.openqa.selenium.SessionNotCreatedException ex) {
+                    // Show error message pop-up
+                    JOptionPane.showMessageDialog(
+                            AccountSelectionGUI.this, // The parent component
+                            "Could not start a new session. Please enable 'Allow remote automation' in Safari settings.\n" +
+                                    "To enable this option:\n" +
+                                    "1. Open Safari.\n" +
+                                    "2. Go to Safari > Settings > Advanced.\n" +
+                                    "3. Select features for Web Developers.\n"+
+                                    "4. Click Developer TAB.\n"+
+                                    "3. Enable 'Allow remote automation'.",
+                            "Safari Automation Error",
+                            JOptionPane.ERROR_MESSAGE
+                    );
+                }
+            }
+        });
+
+        add(safariIconLabel);
 
 
         submitButton.addActionListener(e -> {
@@ -328,6 +410,20 @@ public class AccountSelectionGUI extends JFrame {
         offersCheckBox.setSelected(false);
         paymentPlanCheckBox.setSelected(false);
         errorTextArea.setText("");
+    }
+
+    // Method to get URL based on site name
+    private String getUrlForSite(String siteName) {
+        switch (siteName) {
+            case "Google":
+                return "https://www.google.com";
+            case "Facebook":
+                return "https://www.facebook.com";
+            case "YouTube":
+                return "https://www.youtube.com";
+            default:
+                return "";
+        }
     }
 
     private void goBackToMainApp() {

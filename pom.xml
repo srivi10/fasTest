@@ -6,13 +6,15 @@
 
     <groupId>org.example</groupId>
     <artifactId>ProfitCalculator</artifactId>
-    <version>${project.version}</version> <!-- Use property for version -->
+    <version>${project.version}</version>
 
     <properties>
-        <project.version>1.0.6</project.version> <!-- Set a default version -->
+        <project.version>1.0.7</project.version>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <webdrivermanager.version>5.6.4</webdrivermanager.version>
+        <selenium.version>4.22.0</selenium.version>
     </properties>
 
     <dependencies>
@@ -29,6 +31,20 @@
             <artifactId>poi-ooxml</artifactId>
             <version>5.2.3</version>
         </dependency>
+
+        <!-- Selenium for browser automation -->
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-java</artifactId>
+            <version>${selenium.version}</version>
+        </dependency>
+
+        <!-- WebDriverManager to manage WebDriver binaries -->
+        <dependency>
+            <groupId>io.github.bonigarcia</groupId>
+            <artifactId>webdrivermanager</artifactId>
+            <version>${webdrivermanager.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -38,7 +54,7 @@
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
-                <filtering>false</filtering> <!-- Set to true if you need filtering -->
+                <filtering>false</filtering>
             </resource>
         </resources>
 
@@ -68,6 +84,16 @@
                                     <mainClass>org.srivi.Trading.QE.fasTest</mainClass> <!-- Replace with your main class -->
                                 </transformer>
                             </transformers>
+                            <filters>
+                                <filter>
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <exclude>META-INF/*.SF</exclude>
+                                        <exclude>META-INF/*.DSA</exclude>
+                                        <exclude>META-INF/*.RSA</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
                         </configuration>
                     </execution>
                 </executions>
