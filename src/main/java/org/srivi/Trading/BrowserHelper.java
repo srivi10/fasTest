@@ -1,10 +1,10 @@
 package org.srivi.Trading;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.safari.SafariDriver;
-import io.github.bonigarcia.wdm.WebDriverManager;
 
 public class BrowserHelper {
     private WebDriver driver;
@@ -19,11 +19,10 @@ public class BrowserHelper {
     public BrowserHelper(BrowserType browserType) {
         switch (browserType) {
             case CHROME:
-                WebDriverManager.chromedriver().setup();
-                driver = new ChromeDriver();
+                driver = new ChromeDriver();  // Selenium Manager will handle driver setup automatically
                 break;
             case SAFARI:
-                driver = new SafariDriver();
+                driver = new SafariDriver();  // No driver setup needed for Safari
                 break;
             default:
                 throw new IllegalArgumentException("Unsupported browser type");
