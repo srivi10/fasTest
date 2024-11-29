@@ -25,6 +25,7 @@ public class AccountSelectionGUI extends JFrame {
     private JComboBox<String> transferComboBox;
     private JComboBox<String> offersComboBox;
     private JComboBox<String> paymentPlanComboBox;
+    private JComboBox<String> creditLimitComboBox;
     private JButton submitButton;
     private JButton resetButton;
     private JButton backButton; // Back button
@@ -34,7 +35,9 @@ public class AccountSelectionGUI extends JFrame {
     private JTextField accountTypeField;
     private JCheckBox transferCheckBox;
     private JCheckBox offersCheckBox;
+
     private JCheckBox paymentPlanCheckBox;
+    private JCheckBox creditLimitCheckBox;
     private JLabel loadingLabel;
     private JLabel loadingIconLabel;
     private JTextArea errorTextArea;
@@ -72,7 +75,8 @@ public class AccountSelectionGUI extends JFrame {
         transferComboBox = new JComboBox<>(new String[]{"Select", "Eligible", "Ineligible"});
         offersComboBox = new JComboBox<>(new String[]{"Select", "Eligible", "Ineligible"});
         paymentPlanComboBox = new JComboBox<>(new String[]{"Select", "Eligible", "Ineligible"});
-
+//herecombo
+        creditLimitComboBox =new JComboBox<>(new String[]{"Select", "Eligible", "Ineligible"});
         submitButton = new JButton("Submit");
         resetButton = new JButton("Reset");
 
@@ -82,7 +86,9 @@ public class AccountSelectionGUI extends JFrame {
         accountTypeField = new JTextField();
         transferCheckBox = new JCheckBox();
         offersCheckBox = new JCheckBox();
+        //here
         paymentPlanCheckBox = new JCheckBox();
+        creditLimitCheckBox = new JCheckBox();
 
         loadingIconLabel = new JLabel();
         ImageIcon loadingIcon = new ImageIcon(getClass().getResource("/icons/MasterLoading.png"));
@@ -110,6 +116,9 @@ public class AccountSelectionGUI extends JFrame {
         add(offersComboBox).setBounds(150, 170, 150, 30);
         add(new JLabel("Payment Plan:")).setBounds(20, 210, 120, 30);
         add(paymentPlanComboBox).setBounds(150, 210, 150, 30);
+//herecombo
+        add(new JLabel("Credit Limit:")).setBounds(320, 50, 120, 30);
+        add(creditLimitComboBox).setBounds(420, 50, 150, 30);
 
         add(submitButton).setBounds(50, 260, 100, 30);
         add(resetButton).setBounds(170, 260, 100, 30);
@@ -152,10 +161,14 @@ public class AccountSelectionGUI extends JFrame {
         add(offersCheckBox).setBounds(320, 460, 30, 30);
         add(new JLabel("Payment Plan")).setBounds(370, 460, 120, 30);
         add(paymentPlanCheckBox).setBounds(490, 460, 30, 30);
+        //here
+        add(new JLabel("Credit Limit")).setBounds(20, 500, 120, 30);
+        add(creditLimitCheckBox).setBounds(150, 500, 200, 30);
+
         add(loadingIconLabel).setBounds(450, 250, 45, 40); // Position it above the loadingLabel
 
         add(loadingLabel).setBounds(450, 300, 100, 30);
-        add(errorTextArea).setBounds(20, 500, 380, 40);
+        add(errorTextArea).setBounds(20, 550, 380, 40);
 
         ImageIcon addAccountIcon = new ImageIcon(getClass().getResource("/icons/AddAccount1.png"));
 
@@ -167,7 +180,7 @@ public class AccountSelectionGUI extends JFrame {
 
         // Create a JLabel with the smoothed icon
         JLabel iconLabel = new JLabel(smoothIcon);
-        iconLabel.setBounds(410, 505, 35, 35); // Position and size of the icon
+        iconLabel.setBounds(410, 555, 35, 35); // Position and size of the icon
         iconLabel.setToolTipText("Click here to request for Adding Accounts"); // Add tooltip
         add(iconLabel);
 
@@ -185,14 +198,14 @@ public class AccountSelectionGUI extends JFrame {
         });
         JLabel otpLabel = new JLabel("OTP Helper:");
         //otpLabel.setFont(interFont);
-        otpLabel.setBounds(20, 550, 200, 30);
+        otpLabel.setBounds(20, 600, 200, 30);
         add(otpLabel);
 
         ImageIcon otpHelperIcon = new ImageIcon(getClass().getClassLoader().getResource("icons/OTP.png"));
         Image scaledOtpImage = otpHelperIcon.getImage().getScaledInstance(35, 35, Image.SCALE_SMOOTH);
         JButton otpHelperButton = new JButton(new ImageIcon(scaledOtpImage));
         otpHelperButton.setToolTipText("Quickly Enter Stub OTP to Android Devices");
-        otpHelperButton.setBounds(100, 545, 35, 40);
+        otpHelperButton.setBounds(100, 595, 35, 40);
         otpHelperButton.setBorderPainted(false);
         otpHelperButton.setContentAreaFilled(false);
         otpHelperButton.setFocusPainted(false);
@@ -207,7 +220,7 @@ public class AccountSelectionGUI extends JFrame {
         });
 
         JLabel launchTextLabel = new JLabel("Launch MBNA Online");
-        launchTextLabel.setBounds(20, 600, 150, 30);
+        launchTextLabel.setBounds(20, 640, 150, 30);
         add(launchTextLabel);
 
         ImageIcon cautionIcon = new ImageIcon(getClass().getClassLoader().getResource("icons/Tips.png"));
@@ -216,12 +229,12 @@ public class AccountSelectionGUI extends JFrame {
 
         JLabel cautionIconLabel = new JLabel(scaledCautionIcon);
         cautionIconLabel.setToolTipText("Select an Account and Launch the Browser");
-        cautionIconLabel.setBounds(145, 590, 35, 35);
+        cautionIconLabel.setBounds(145, 630, 35, 35);
         add(cautionIconLabel);
 
 // Dropdown for website selection
         websiteComboBox = new JComboBox<>(new String[]{"Google", "Facebook", "YouTube"});
-        websiteComboBox.setBounds(180, 600, 100, 30);
+        websiteComboBox.setBounds(180, 640, 100, 30);
         add(websiteComboBox);
 
         ImageIcon chromeIcon = new ImageIcon(getClass().getClassLoader().getResource("icons/ChromeIcon.png"));
@@ -230,7 +243,7 @@ public class AccountSelectionGUI extends JFrame {
 
         JLabel chromeIconLabel = new JLabel(scaledChromeIcon);
         chromeIconLabel.setToolTipText("Open selected Env in Chrome");
-        chromeIconLabel.setBounds(290, 595, 35, 35);
+        chromeIconLabel.setBounds(290, 635, 35, 35);
         chromeIconLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -253,7 +266,7 @@ public class AccountSelectionGUI extends JFrame {
 
         JLabel safariIconLabel = new JLabel(scaledSafariIcon);
         safariIconLabel.setToolTipText("Open selected Env in Safari");
-        safariIconLabel.setBounds(330, 595, 35, 35); // Position next to Chrome icon
+        safariIconLabel.setBounds(330, 635, 35, 35); // Position next to Chrome icon
         safariIconLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -364,6 +377,10 @@ public class AccountSelectionGUI extends JFrame {
             if (!"Select".equals(paymentPlanComboBox.getSelectedItem())) {
                 criteria.put("Payment Plan", (String) paymentPlanComboBox.getSelectedItem());
             }
+            //herecombo creditLimitComboBox
+            if (!"Select".equals(creditLimitComboBox.getSelectedItem())) {
+                criteria.put("Credit Limit", (String) creditLimitComboBox.getSelectedItem());
+            }
 
             // Fetch accounts based on criteria
             List<String[]> matchingAccounts = fetcher.fetchAccounts(criteria);
@@ -376,6 +393,8 @@ public class AccountSelectionGUI extends JFrame {
                 transferCheckBox.setSelected("Eligible".equalsIgnoreCase(account[4]));
                 offersCheckBox.setSelected("Eligible".equalsIgnoreCase(account[5]));
                 paymentPlanCheckBox.setSelected("Eligible".equalsIgnoreCase(account[6]));
+                //here
+                creditLimitCheckBox.setSelected("Eligible".equalsIgnoreCase(account[7]));
             } else {
                 errorTextArea.setText("No accounts found matching the criteria.");
             }
@@ -391,6 +410,8 @@ public class AccountSelectionGUI extends JFrame {
         transferComboBox.setSelectedIndex(0);
         offersComboBox.setSelectedIndex(0);
         paymentPlanComboBox.setSelectedIndex(0);
+        //herecombo
+        creditLimitComboBox.setSelectedIndex(0);
         usernameField.setText("");
         passwordField.setText("");
         accountHolderField.setText("");
@@ -398,6 +419,8 @@ public class AccountSelectionGUI extends JFrame {
         transferCheckBox.setSelected(false);
         offersCheckBox.setSelected(false);
         paymentPlanCheckBox.setSelected(false);
+        //here
+        creditLimitCheckBox.setSelected(false);
         errorTextArea.setText("");
     }
 
@@ -409,6 +432,8 @@ public class AccountSelectionGUI extends JFrame {
         transferCheckBox.setSelected(false);
         offersCheckBox.setSelected(false);
         paymentPlanCheckBox.setSelected(false);
+        creditLimitCheckBox.setSelected(false);
+        //here
         errorTextArea.setText("");
     }
 

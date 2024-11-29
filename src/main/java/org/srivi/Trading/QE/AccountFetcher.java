@@ -52,6 +52,8 @@ public class AccountFetcher {
                 return 5; // Index for offers eligibility
             case "Payment Plan":
                 return 6; // Index for payment plan
+            case "Credit Limit":
+                return 7; // Index for credit limit (new addition)
             default:
                 return -1;
         }

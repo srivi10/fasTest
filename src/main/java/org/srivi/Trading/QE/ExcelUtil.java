@@ -27,9 +27,10 @@ public class ExcelUtil {
                 String transfer = row.getCell(5).getStringCellValue();
                 String offers = row.getCell(6).getStringCellValue();
                 String paymentPlan = row.getCell(7).getStringCellValue();
+                String creditLimit =row.getCell(8).getStringCellValue();
 
                 // Store in map with account set as key
-                accounts.put(accountSet, new String[]{username, password, holder, type, transfer, offers, paymentPlan});
+                accounts.put(accountSet, new String[]{username, password, holder, type, transfer, offers, paymentPlan,creditLimit});
             }
         }
 
