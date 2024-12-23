@@ -257,4 +257,52 @@ public class ADBHelper {
             }
         }
     }
+
+    public static void setLanguageToEnglish() {
+        try {
+            // Execute 'adb root' command
+            ProcessBuilder processRoot = new ProcessBuilder(adbExecutable, "root");
+            Process rootProcess = processRoot.start();
+            rootProcess.waitFor();
+
+            // Wait for 0.5 seconds
+            Thread.sleep(500);
+
+            // Execute 'adb shell "setprop persist.sys.locale fr-CA; stop; start"' command
+            ProcessBuilder processLocale = new ProcessBuilder(adbExecutable, "shell", "setprop", "persist.sys.locale", "en-CA", ";", "stop", ";", "start");
+            Process localeProcess = processLocale.start();
+            localeProcess.waitFor();
+
+                    } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null,
+                    "Failed to change language to French: " + e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    public static void setLanguageToFrench() {
+        try {
+            // Execute 'adb root' command
+            ProcessBuilder processRoot = new ProcessBuilder(adbExecutable, "root");
+            Process rootProcess = processRoot.start();
+            rootProcess.waitFor();
+
+            // Wait for 0.5 seconds
+            Thread.sleep(500);
+
+            // Execute 'adb shell "setprop persist.sys.locale fr-CA; stop; start"' command
+            ProcessBuilder processLocale = new ProcessBuilder(adbExecutable, "shell", "setprop", "persist.sys.locale", "fr-CA", ";", "stop", ";", "start");
+            Process localeProcess = processLocale.start();
+            localeProcess.waitFor();
+
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null,
+                    "Failed to change language to French: " + e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+    }
 }

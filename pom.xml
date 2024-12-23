@@ -5,11 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.example</groupId>
-    <artifactId>ProfitCalculator</artifactId>
+    <artifactId>fasTest</artifactId>
     <version>${project.version}</version>
 
     <properties>
-        <project.version>1.0.8</project.version>
+        <project.version>1.0.9</project.version>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

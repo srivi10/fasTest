@@ -22,7 +22,7 @@ public class AndroidScreenRecordingGUI extends  JFrame{
     }
     private void setupUI(){
         JFrame recordingFrame = new JFrame("Screen Recording");
-        recordingFrame.setSize(500, 400);
+        recordingFrame.setSize(500, 430);
         recordingFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         recordingFrame.setLayout(null);
         recordingFrame.setResizable(false);

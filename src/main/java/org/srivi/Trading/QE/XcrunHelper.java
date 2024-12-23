@@ -134,10 +134,84 @@ public class XcrunHelper {
 
     }
 
-    public static void ENLocale() {
+
+    public static void setLanguageToEnglish(List<String> deviceIds) {
+        for (String deviceId : deviceIds) {
+            try {
+                // Execute 'xcrun simctl spawn ... AppleLocale' command
+                executeCommandWithPolling(new ProcessBuilder(
+                        "xcrun", "simctl", "spawn", deviceId, "defaults", "write", "NSGlobalDomain", "AppleLocale", "en_CA"));
+
+                // Execute 'xcrun simctl spawn ... AppleLanguages' command
+                executeCommandWithPolling(new ProcessBuilder(
+                        "xcrun", "simctl", "spawn", deviceId, "defaults", "write", "NSGlobalDomain", "AppleLanguages", "(en)"));
+
+                // Execute 'xcrun simctl shutdown' command
+                executeCommandWithPolling(new ProcessBuilder(
+                        "xcrun", "simctl", "shutdown", deviceId));
+
+                // Execute 'xcrun simctl boot' command
+                executeCommandWithPolling(new ProcessBuilder(
+                        "xcrun", "simctl", "boot", deviceId));
+
+            } catch (IOException | InterruptedException e) {
+                e.printStackTrace();
+                // Show error popup for each device if any fails
+                JOptionPane.showMessageDialog(null,
+                        "Failed to change language to English for iOS device " + deviceId + ": " + e.getMessage(),
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }
 
-    public static void FRLocale() {
+    private static void executeCommandWithPolling(ProcessBuilder processBuilder) throws IOException, InterruptedException {
+        Process process = processBuilder.start();
+        long startTime = System.currentTimeMillis();
+        long timeout = 5000; // Timeout in milliseconds (e.g., 5 seconds)
+
+        while (process.isAlive()) {
+            if (System.currentTimeMillis() - startTime > timeout) {
+                process.destroy();
+                throw new IOException("Process timed out: " + processBuilder.command());
+            }
+            Thread.sleep(100); // Poll every 100 ms
+        }
+
+        if (process.exitValue() != 0) {
+            throw new IOException("Process failed with exit code " + process.exitValue() + ": " + processBuilder.command());
+        }
+    }
+
+    public static void setLanguageToFrench(List<String> deviceIds) {
+        for (String deviceId : deviceIds) {
+            try {
+                // Execute 'xcrun simctl spawn ... AppleLocale' command
+                executeCommandWithPolling(new ProcessBuilder(
+                        "xcrun", "simctl", "spawn", deviceId, "defaults", "write", "NSGlobalDomain", "AppleLocale", "fr_CA"));
+
+                // Execute 'xcrun simctl spawn ... AppleLanguages' command
+                executeCommandWithPolling(new ProcessBuilder(
+                        "xcrun", "simctl", "spawn", deviceId, "defaults", "write", "NSGlobalDomain", "AppleLanguages", "(fr)"));
+
+                // Execute 'xcrun simctl shutdown' command
+                executeCommandWithPolling(new ProcessBuilder(
+                        "xcrun", "simctl", "shutdown", deviceId));
+
+                // Execute 'xcrun simctl boot' command
+                executeCommandWithPolling(new ProcessBuilder(
+                        "xcrun", "simctl", "boot", deviceId));
+
+            }
+       catch (IOException | InterruptedException e) {
+                e.printStackTrace();
+                // Show error popup for each device if any fails
+                JOptionPane.showMessageDialog(null,
+                        "Failed to change language to French for iOS device " + deviceId + ": " + e.getMessage(),
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }
 }
 

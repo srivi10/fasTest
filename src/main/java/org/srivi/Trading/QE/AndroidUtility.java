@@ -21,11 +21,14 @@ public class AndroidUtility extends JFrame {
     private JButton crashScanButton;
     private JButton wifiOnButton;
     private JButton wifiOffButton;
+    private JButton enButton;
+    private JButton frButton;
+    private List<String> devices;
     String desktopPath = System.getProperty("user.home") + "/Desktop";
     private HelpOptionsPanel helpOptionsPanel;
         public AndroidUtility() {
         setTitle("Android Utility");
-        setSize(400, 400);
+        setSize(400, 430);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(null);
         setResizable(false);
@@ -192,7 +195,7 @@ public class AndroidUtility extends JFrame {
             add(crashScanButton);
 
 // --- Wi-Fi Control Buttons ---
-        JLabel wifiLabel = new JLabel("Wi-Fi Control :");
+        JLabel wifiLabel = new JLabel("Wi-Fi Control");
       //  wifiLabel.setFont(interFont.deriveFont(12f));
         wifiLabel.setFont(interFont);
         wifiLabel.setBounds(50, 250, 200, 30);
@@ -238,6 +241,66 @@ public class AndroidUtility extends JFrame {
             }
         });
 
+            // --- Language Selection Buttons ---
+            JLabel languageLabel = new JLabel("Language");
+            languageLabel.setFont(interFont);
+            languageLabel.setBounds(50, 290, 200, 30);
+            add(languageLabel);
+
+            ImageIcon cautionIcon = new ImageIcon(getClass().getClassLoader().getResource("icons/Tips.png"));
+            Image scaledCautionImage = cautionIcon.getImage().getScaledInstance(15, 15, Image.SCALE_SMOOTH);
+            ImageIcon scaledCautionIcon = new ImageIcon(scaledCautionImage);
+
+            JLabel cautionIconLabel = new JLabel(scaledCautionIcon);
+            cautionIconLabel.setToolTipText("Compatible with Emulator");
+            cautionIconLabel.setBounds(100, 280, 35, 35);
+            add(cautionIconLabel);
+
+// EN Button
+            ImageIcon enIcon = new ImageIcon(getClass().getClassLoader().getResource("icons/USLocale.png"));
+            Image scaledEnImage = enIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+            enButton = new JButton(new ImageIcon(scaledEnImage));
+            enButton.setToolTipText("Set Language to English");
+            enButton.setBounds(150, 285, 35, 40);
+            enButton.setBorderPainted(false);
+            enButton.setContentAreaFilled(false);
+            enButton.setFocusPainted(false);
+            enButton.setOpaque(false);
+            add(enButton);
+
+// FR Button
+            ImageIcon frIcon = new ImageIcon(getClass().getClassLoader().getResource("icons/FR_Locale.png"));
+            Image scaledFrImage = frIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+            frButton = new JButton(new ImageIcon(scaledFrImage));
+            frButton.setToolTipText("Set Language to French");
+            frButton.setBounds(190, 285, 35, 40);
+            frButton.setBorderPainted(false);
+            frButton.setContentAreaFilled(false);
+            frButton.setFocusPainted(false);
+            frButton.setOpaque(false);
+            add(frButton);
+
+// Action Listeners for Language Buttons
+            enButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    // Placeholder: Call ADBHelper to set language to EN
+                    ADBHelper.setLanguageToEnglish();
+                    JOptionPane.showMessageDialog(null, "Language set to English and Region Canada!", "Success",
+                            JOptionPane.INFORMATION_MESSAGE);
+                }
+            });
+
+            frButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    // Placeholder: Call ADBHelper to set language to FR
+                    ADBHelper.setLanguageToFrench();
+                    JOptionPane.showMessageDialog(null, "Language set to French and Region Canada!");
+                }
+            });
+
+
         // Update the device status
         updateDeviceStatus();
 
@@ -261,7 +324,7 @@ public class AndroidUtility extends JFrame {
 
     // Method to update the device connection status
     public void updateDeviceStatus() {
-        List<String> devices = ADBHelper.getConnectedDevices();
+        devices = ADBHelper.getConnectedDevices();
 
         // Update status text based on the number of connected devices
         String statusText;
@@ -284,6 +347,17 @@ public class AndroidUtility extends JFrame {
         crashScanButton.setEnabled(devicesConnected);
         wifiOnButton.setEnabled(devicesConnected);
         wifiOffButton.setEnabled(devicesConnected);
+        boolean isSingleEmulatorConnected = devices.size() == 1 && devices.get(0).startsWith("emulator");
+
+        if (isSingleEmulatorConnected) {
+            enButton.setEnabled(true);
+            frButton.setEnabled(true);
+        } else {
+            enButton.setEnabled(false);
+            frButton.setEnabled(false);
+        }
+
+
     }
 
     // Method to open Account Selection GUI

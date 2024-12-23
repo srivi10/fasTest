@@ -17,11 +17,15 @@ public class iOSUtility extends JFrame {
     private HelpOptionsPanel helpOptionsPanel;
     private JButton screenshotButton;
     private JButton screenRecordingButton;
+    private JButton enButton;
+    private JButton frButton;
+    private List<String> devices;
+
     String desktopPath = System.getProperty("user.home") + "/Desktop";
 
     public iOSUtility() {
         setTitle("iOS Utility");
-        setSize(400, 350);
+        setSize(400, 370);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(null);
         setResizable(false);
@@ -140,6 +144,66 @@ public class iOSUtility extends JFrame {
             }
         });
         add(accountFinderButton);
+// --- Language Selection Buttons ---
+        JLabel languageLabel = new JLabel("Language");
+        languageLabel.setFont(interFont);
+        languageLabel.setBounds(60, 220, 200, 30);
+        add(languageLabel);
+
+        ImageIcon cautionIcon = new ImageIcon(getClass().getClassLoader().getResource("icons/Tips.png"));
+        Image scaledCautionImage = cautionIcon.getImage().getScaledInstance(15, 15, Image.SCALE_SMOOTH);
+        ImageIcon scaledCautionIcon = new ImageIcon(scaledCautionImage);
+
+        JLabel cautionIconLabel = new JLabel(scaledCautionIcon);
+        cautionIconLabel.setToolTipText("Set Language and Region");
+        cautionIconLabel.setBounds(110, 210, 35, 35);
+        add(cautionIconLabel);
+
+// EN Button
+        ImageIcon enIcon = new ImageIcon(getClass().getClassLoader().getResource("icons/USLocale.png"));
+        Image scaledEnImage = enIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        enButton = new JButton(new ImageIcon(scaledEnImage));
+        enButton.setToolTipText("Set Language to English");
+        enButton.setBounds(160, 217, 35, 40);
+        enButton.setBorderPainted(false);
+        enButton.setContentAreaFilled(false);
+        enButton.setFocusPainted(false);
+        enButton.setOpaque(false);
+        add(enButton);
+
+// FR Button
+        ImageIcon frIcon = new ImageIcon(getClass().getClassLoader().getResource("icons/FR_Locale.png"));
+        Image scaledFrImage = frIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        frButton = new JButton(new ImageIcon(scaledFrImage));
+        frButton.setToolTipText("Set Language to French");
+        frButton.setBounds(200, 217, 35, 40);
+        frButton.setBorderPainted(false);
+        frButton.setContentAreaFilled(false);
+        frButton.setFocusPainted(false);
+        frButton.setOpaque(false);
+        add(frButton);
+
+// Action Listeners for Language Buttons
+        enButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Placeholder: Call ADBHelper to set language to EN
+                XcrunHelper.setLanguageToEnglish(devices);
+                JOptionPane.showMessageDialog(null, "Language set to English and Region Canada!", "Success",
+                        JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
+
+        frButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Placeholder: Call ADBHelper to set language to FR
+                XcrunHelper.setLanguageToFrench(devices);
+                JOptionPane.showMessageDialog(null, "Language set to French and Region Canada!", "Success",
+                        JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
+
         updateDeviceStatus();
 
         setVisible(true);
@@ -158,13 +222,15 @@ public class iOSUtility extends JFrame {
 
     // Method to update the device connection status
     public void updateDeviceStatus() {
-        List<String> devices = XcrunHelper.getConnectedDevices();
+        devices = XcrunHelper.getConnectedDevices();
         String statusText = devices.isEmpty() ? "No devices connected." : "Connected Devices: " + String.join(", ", devices);
         deviceStatusLabel.setText(statusText);
         boolean devicesConnected = !devices.isEmpty();
         // Enable or disable buttons based on device status
         screenshotButton.setEnabled(devicesConnected);
         screenRecordingButton.setEnabled(devicesConnected);
+        enButton.setEnabled(devicesConnected);
+        frButton.setEnabled(devicesConnected);
     }
 
 
