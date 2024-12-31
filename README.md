@@ -276,4 +276,4 @@ This project is licensed under the MIT License. See the `LICENSE` file for more 
 
 ## 8. Contact
 
-For any questions or issues, please contact the project maintainer at [asrivignesh10@gmail.com].
+For any questions or issues, please contact the project developer at [asrivignesh10@gmail.com].
