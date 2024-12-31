@@ -43,9 +43,12 @@ public class AccountSelectionGUI extends JFrame {
     private JTextArea errorTextArea;
     private JComboBox<String> websiteComboBox;
     private BrowserHelper browserHelper;
+    private JLabel chromeLoadingIconLabel;
+    private JLabel chromeLoadingLabel;
 
 
     private boolean isLoading = false;
+    private boolean isChromeLoading = false;
     private HelpOptionsPanel helpOptionsPanel;
 
     public AccountSelectionGUI(JFrame mainAppFrame) {
@@ -244,17 +247,48 @@ public class AccountSelectionGUI extends JFrame {
         JLabel chromeIconLabel = new JLabel(scaledChromeIcon);
         chromeIconLabel.setToolTipText("Open selected Env in Chrome");
         chromeIconLabel.setBounds(290, 635, 35, 35);
+
+        chromeLoadingIconLabel = new JLabel();
+        ImageIcon chromeLoadingIcon = new ImageIcon(getClass().getResource("/icons/MasterLoading.png"));
+        chromeLoadingIconLabel.setIcon(chromeLoadingIcon);
+        chromeLoadingIconLabel.setVisible(false);
+        add(chromeLoadingIconLabel).setBounds(390, 625, 45, 40); // Position it next to the Safari icon
+
+        chromeLoadingLabel = new JLabel("Loading...");
+        chromeLoadingLabel.setForeground(new Color(0, 122, 255));
+        chromeLoadingLabel.setVisible(false);
+        add(chromeLoadingLabel).setBounds(390, 675, 100, 30);
+
         chromeIconLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                // Initialize BrowserHelper with Chrome
-                browserHelper = new BrowserHelper(BrowserHelper.BrowserType.CHROME);
-                String selectedSite = (String) websiteComboBox.getSelectedItem();
-                if (selectedSite != null) {
-                    String url = getUrlForSite(selectedSite);
-                    browserHelper.launchWebsite(url);
-                    browserHelper.inputCredentials(usernameField.getText(), passwordField.getText());
-                }
+
+                if (isChromeLoading) return;  // Prevent action if loading is already active
+
+                isChromeLoading = true;  // Set loading flag
+                chromeLoadingIconLabel.setVisible(true);
+                chromeLoadingLabel.setVisible(true);
+
+                Timer timer = new Timer(500, evt -> {
+                    // Initialize BrowserHelper with Chrome
+                    browserHelper = new BrowserHelper(BrowserHelper.BrowserType.CHROME);
+                    String selectedSite = (String) websiteComboBox.getSelectedItem();
+                    if (selectedSite != null) {
+                        String url = getUrlForSite(selectedSite);
+                        browserHelper.launchWebsite(url);
+                        browserHelper.inputCredentials(usernameField.getText(), passwordField.getText());
+                    }
+
+                    // Hide loading icon and label
+                    chromeLoadingIconLabel.setVisible(false);
+                    chromeLoadingLabel.setVisible(false);
+                    isChromeLoading = false;  // Reset loading flag
+
+                    ((Timer) evt.getSource()).stop();  // Stop the timer after executing
+                });
+
+                timer.setRepeats(false);  // Ensure the timer only runs once
+                timer.start();  // Start the timer
             }
         });
         add(chromeIconLabel);
