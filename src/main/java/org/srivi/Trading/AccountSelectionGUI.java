@@ -222,7 +222,7 @@ public class AccountSelectionGUI extends JFrame {
             }
         });
 
-        JLabel launchTextLabel = new JLabel("Launch MBNA Online");
+        JLabel launchTextLabel = new JLabel("Launch Website");
         launchTextLabel.setBounds(20, 640, 150, 30);
         add(launchTextLabel);
 
@@ -232,7 +232,7 @@ public class AccountSelectionGUI extends JFrame {
 
         JLabel cautionIconLabel = new JLabel(scaledCautionIcon);
         cautionIconLabel.setToolTipText("Select an Account and Launch the Browser");
-        cautionIconLabel.setBounds(145, 630, 35, 35);
+        cautionIconLabel.setBounds(120, 630, 35, 35);
         add(cautionIconLabel);
 
 // Dropdown for website selection
