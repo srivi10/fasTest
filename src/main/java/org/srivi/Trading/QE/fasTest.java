@@ -14,14 +14,14 @@ public class fasTest {
     private HelpOptionsPanel helpPanel;
     private JLabel loadingLabel;       // Label to show loading text
     private JLabel loadingIconLabel;   // Label to show loading icon
-    private JButton androidButton, iosButton;
+    private JButton androidButton, iosButton , autoEnrollButton;
     private JLabel selectDeviceLabel;
     private JLabel versionLabel;
 
     public fasTest() {
         // Initialize the main frame
         frame = new JFrame("Home");
-        frame.setSize(400, 300);
+        frame.setSize(400, 330);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(null);
 
@@ -53,6 +53,13 @@ public class fasTest {
         iosButton.setFont(interFont);
         iosButton.setBounds(220, 130, 120, 30);
         frame.add(iosButton);
+
+        // Button for Auto Enroll option
+        autoEnrollButton = new JButton("Auto Enroll");
+        autoEnrollButton.setFont(interFont);
+        autoEnrollButton.setBounds(135, 180, 120, 30); // Centered below the other buttons
+        frame.add(autoEnrollButton);
+
 
         // Label for the loading icon
         loadingIconLabel = new JLabel();
@@ -101,6 +108,24 @@ public class fasTest {
                 @Override
                 protected void done() {
                     openIOSUtilityScreen();
+                    hideLoadingMessage();
+                }
+            }.execute();
+        });
+
+        // ActionListener for Auto Enroll Button
+        autoEnrollButton.addActionListener(e -> {
+            showLoadingMessage("Loading Auto Enroll Utility...");
+            new SwingWorker<Void, Void>() {
+                @Override
+                protected Void doInBackground() throws Exception {
+                    Thread.sleep(1000); // Simulate delay
+                    return null;
+                }
+
+                @Override
+                protected void done() {
+                    openAutoEnrollUtilityScreen();
                     hideLoadingMessage();
                 }
             }.execute();
@@ -225,6 +250,12 @@ public class fasTest {
         iosUtility.setMainAppFrame(frame); // Pass the main frame to iOSUtility
     }
 
+    private void openAutoEnrollUtilityScreen() {
+        frame.setVisible(false); // Hide the main frame
+        AutoEnrollUtility autoEnrollUtility = new AutoEnrollUtility();
+        autoEnrollUtility.setMainAppFrame(frame); // Pass the main frame to AutoEnrollUtility
+    }
+
     // Method to show the loading message, icon, and hide buttons
     private void showLoadingMessage(String message) {
         loadingLabel.setText(message);
@@ -235,6 +266,7 @@ public class fasTest {
         androidButton.setVisible(false);
         iosButton.setVisible(false);
         selectDeviceLabel.setVisible(false);
+        autoEnrollButton.setVisible(false);
 
         if (helpPanel != null) {
             helpPanel.setVisible(false);
@@ -250,6 +282,7 @@ public class fasTest {
         androidButton.setVisible(true);
         iosButton.setVisible(true);
         selectDeviceLabel.setVisible(true);
+        autoEnrollButton.setVisible(true);
 
         if (helpPanel != null) {
             helpPanel.setVisible(true);
