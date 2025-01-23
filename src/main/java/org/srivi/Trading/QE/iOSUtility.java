@@ -183,24 +183,52 @@ public class iOSUtility extends JFrame {
         frButton.setOpaque(false);
         add(frButton);
 
+        // Add loading icon for language actions
+        JLabel languageLoadingIconLabel = new JLabel();
+        ImageIcon languageLoadingIcon = new ImageIcon(getClass().getResource("/icons/MasterLoading.png"));
+        languageLoadingIconLabel.setIcon(languageLoadingIcon);
+        languageLoadingIconLabel.setVisible(false);
+        add(languageLoadingIconLabel).setBounds(265, 210, 45, 40); // Position it next to the language buttons
+
+        JLabel languageLoadingLabel = new JLabel("Loading...");
+        languageLoadingLabel.setForeground(new Color(0, 122, 255));
+        languageLoadingLabel.setVisible(false);
+        add(languageLoadingLabel).setBounds(265, 245, 100, 30);
+
 // Action Listeners for Language Buttons
         enButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Placeholder: Call ADBHelper to set language to EN
-                XcrunHelper.setLanguageToEnglish(devices);
-                JOptionPane.showMessageDialog(null, "Language set to English and Region Canada!", "Success",
-                        JOptionPane.INFORMATION_MESSAGE);
+                languageLoadingIconLabel.setVisible(true);
+                languageLoadingLabel.setVisible(true);
+
+                Timer timer = new Timer(500, evt -> {
+                    XcrunHelper.setLanguageToEnglish(devices);
+                    languageLoadingIconLabel.setVisible(false);
+                    languageLoadingLabel.setVisible(false);
+                    JOptionPane.showMessageDialog(null, "Language set to English and Region Canada!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                    ((Timer) evt.getSource()).stop();
+                });
+                timer.setRepeats(false);
+                timer.start();
             }
         });
 
         frButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Placeholder: Call ADBHelper to set language to FR
-                XcrunHelper.setLanguageToFrench(devices);
-                JOptionPane.showMessageDialog(null, "Language set to French and Region Canada!", "Success",
-                        JOptionPane.INFORMATION_MESSAGE);
+                languageLoadingIconLabel.setVisible(true);
+                languageLoadingLabel.setVisible(true);
+
+                Timer timer = new Timer(500, evt -> {
+                    XcrunHelper.setLanguageToFrench(devices);
+                    languageLoadingIconLabel.setVisible(false);
+                    languageLoadingLabel.setVisible(false);
+                    JOptionPane.showMessageDialog(null, "Language set to French and Region Canada!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                    ((Timer) evt.getSource()).stop();
+                });
+                timer.setRepeats(false);
+                timer.start();
             }
         });
 
@@ -223,10 +251,18 @@ public class iOSUtility extends JFrame {
     // Method to update the device connection status
     public void updateDeviceStatus() {
         devices = XcrunHelper.getConnectedDevices();
-        String statusText = devices.isEmpty() ? "No devices connected." : "Connected Devices: " + String.join(", ", devices);
+        String statusText;
+        if (devices.isEmpty()) {
+            statusText = "No devices connected.";
+        } else if (devices.size() > 1) {
+            statusText = "Multiple Device connected: " + " Please Connect One !";
+        } else {
+            statusText = "Connected Device: " + devices.get(0);
+        }
         deviceStatusLabel.setText(statusText);
-        boolean devicesConnected = !devices.isEmpty();
-        // Enable or disable buttons based on device status
+
+        boolean devicesConnected = devices.size() == 1;
+// Enable or disable buttons based on device status
         screenshotButton.setEnabled(devicesConnected);
         screenRecordingButton.setEnabled(devicesConnected);
         enButton.setEnabled(devicesConnected);

@@ -225,19 +225,61 @@ public class AndroidUtility extends JFrame {
         wifiOffButton.setOpaque(false);
         add(wifiOffButton);
 
+            // Add loading icon for Wi-Fi actions
+            JLabel wifiLoadingIconLabel = new JLabel();
+            ImageIcon wifiLoadingIcon = new ImageIcon(getClass().getResource("/icons/MasterLoading.png"));
+            wifiLoadingIconLabel.setIcon(wifiLoadingIcon);
+            wifiLoadingIconLabel.setVisible(false);
+            add(wifiLoadingIconLabel).setBounds(245, 245, 45, 40); // Position it next to the Wi-Fi buttons
+
+            JLabel wifiLoadingLabel = new JLabel("Loading...");
+            wifiLoadingLabel.setForeground(new Color(0, 122, 255));
+            wifiLoadingLabel.setVisible(false);
+            add(wifiLoadingLabel).setBounds(245, 285, 100, 30);
+
+// Add loading icon for language actions
+            JLabel languageLoadingIconLabel = new JLabel();
+            ImageIcon languageLoadingIcon = new ImageIcon(getClass().getResource("/icons/MasterLoading.png"));
+            languageLoadingIconLabel.setIcon(languageLoadingIcon);
+            languageLoadingIconLabel.setVisible(false);
+            add(languageLoadingIconLabel).setBounds(245, 275, 45, 40); // Position it next to the language buttons
+
+            JLabel languageLoadingLabel = new JLabel("Loading...");
+            languageLoadingLabel.setForeground(new Color(0, 122, 255));
+            languageLoadingLabel.setVisible(false);
+            add(languageLoadingLabel).setBounds(245, 315, 100, 30);
+
         wifiOnButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ADBHelper.enableWifi();
-                //JOptionPane.showMessageDialog(null, "Wi-Fi turned on!");
+                wifiLoadingIconLabel.setVisible(true);
+                wifiLoadingLabel.setVisible(true);
+
+                Timer timer = new Timer(500, evt -> {
+                    ADBHelper.enableWifi();
+                    wifiLoadingIconLabel.setVisible(false);
+                    wifiLoadingLabel.setVisible(false);
+                    ((Timer) evt.getSource()).stop();
+                });
+                timer.setRepeats(false);
+                timer.start();
             }
         });
 
         wifiOffButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ADBHelper.disableWifi();
-              //  JOptionPane.showMessageDialog(null, "Wi-Fi turned off!");
+                wifiLoadingIconLabel.setVisible(true);
+                wifiLoadingLabel.setVisible(true);
+
+                Timer timer = new Timer(500, evt -> {
+                    ADBHelper.disableWifi();
+                    wifiLoadingIconLabel.setVisible(false);
+                    wifiLoadingLabel.setVisible(false);
+                    ((Timer) evt.getSource()).stop();
+                });
+                timer.setRepeats(false);
+                timer.start();
             }
         });
 
@@ -252,9 +294,20 @@ public class AndroidUtility extends JFrame {
             ImageIcon scaledCautionIcon = new ImageIcon(scaledCautionImage);
 
             JLabel cautionIconLabel = new JLabel(scaledCautionIcon);
-            cautionIconLabel.setToolTipText("Compatible with Emulator");
+            cautionIconLabel.setToolTipText("Click Here to Learn More");
             cautionIconLabel.setBounds(100, 280, 35, 35);
             add(cautionIconLabel);
+
+    cautionIconLabel.addMouseListener(new MouseAdapter() {
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        String message = "This feature is compatible only with Android emulator.\n\n" +
+                         "If the language change is unsuccessful, try this one-time activity:\n" +
+                         "1) Wipe Android device data (Android Studio -> Device Manager -> Click three dots -> Wipe Data)\n" +
+                         "2) Now click on the EN and FR buttons. The language change should work from now on.\n";
+        JOptionPane.showMessageDialog(null, message, "Information", JOptionPane.INFORMATION_MESSAGE);
+    }
+});
 
 // EN Button
             ImageIcon enIcon = new ImageIcon(getClass().getClassLoader().getResource("icons/USLocale.png"));
@@ -284,20 +337,38 @@ public class AndroidUtility extends JFrame {
             enButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    // Placeholder: Call ADBHelper to set language to EN
-                    ADBHelper.setLanguageToEnglish();
-                    JOptionPane.showMessageDialog(null, "Language set to English and Region Canada!", "Success",
-                            JOptionPane.INFORMATION_MESSAGE);
+                    languageLoadingIconLabel.setVisible(true);
+                    languageLoadingLabel.setVisible(true);
+
+                    Timer timer = new Timer(500, evt -> {
+                        ADBHelper.setLanguageToEnglish();
+                        languageLoadingIconLabel.setVisible(false);
+                        languageLoadingLabel.setVisible(false);
+                        JOptionPane.showMessageDialog(null, "Language set to English and Region Canada!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                        ((Timer) evt.getSource()).stop();
+                    });
+                    timer.setRepeats(false);
+                    timer.start();
                 }
             });
 
             frButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    // Placeholder: Call ADBHelper to set language to FR
-                    ADBHelper.setLanguageToFrench();
-                    JOptionPane.showMessageDialog(null, "Language set to French and Region Canada!");
-                }
+                    languageLoadingIconLabel.setVisible(true);
+                    languageLoadingLabel.setVisible(true);
+
+                    Timer timer = new Timer(500, evt -> {
+                        ADBHelper.setLanguageToFrench();
+                        languageLoadingIconLabel.setVisible(false);
+                        languageLoadingLabel.setVisible(false);
+                        JOptionPane.showMessageDialog(null, "Language set to French and Region Canada!");
+                        ((Timer) evt.getSource()).stop();
+                    });
+                    timer.setRepeats(false);
+                    timer.start();
+
+                     }
             });
 
 
@@ -331,7 +402,7 @@ public class AndroidUtility extends JFrame {
         if (devices.isEmpty()) {
             statusText = "Device Connected: No devices connected !";
         } else if (devices.size() > 1) {
-            statusText = "Device Connected: More than one Device Connected !";
+            statusText = "Multiple Device connected: " + " Please Connect One !";
         } else {
             statusText = "Connected Device: " + devices.get(0);  // Show the single connected device
         }

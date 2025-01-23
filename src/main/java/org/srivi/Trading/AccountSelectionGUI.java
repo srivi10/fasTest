@@ -4,6 +4,8 @@ import org.srivi.Trading.QE.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
@@ -154,6 +156,28 @@ public class AccountSelectionGUI extends JFrame {
         });
         add(passwordKeyboardLabel).setBounds(360, 340, 30, 30); // Adjust bounds as needed
 
+        // Add copy icon next to Username field
+        JLabel usernameCopyLabel = createIconLabel("/icons/CopyIcon.png");
+        usernameCopyLabel.setToolTipText("Copy Username to Clipboard");
+        usernameCopyLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                copyToClipboard(usernameField.getText());
+            }
+        });
+        add(usernameCopyLabel).setBounds(390, 300, 30, 30); // Adjust bounds as needed
+       // Add copy icon next to Password field
+        
+        JLabel passwordCopyLabel = createIconLabel("/icons/CopyIcon.png");
+        passwordCopyLabel.setToolTipText("Copy Password to Clipboard");
+        passwordCopyLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                copyToClipboard(passwordField.getText());
+            }
+        });
+        add(passwordCopyLabel).setBounds(390, 340, 30, 30); // Adjust bounds as needed
+
         add(new JLabel("Account Holder")).setBounds(20, 380, 120, 30);
         add(accountHolderField).setBounds(150, 380, 200, 30);
         add(new JLabel("Account Type")).setBounds(20, 420, 120, 30);
@@ -231,9 +255,21 @@ public class AccountSelectionGUI extends JFrame {
         ImageIcon scaledCautionIcon = new ImageIcon(scaledCautionImage);
 
         JLabel cautionIconLabel = new JLabel(scaledCautionIcon);
-        cautionIconLabel.setToolTipText("Select an Account and Launch the Browser");
+        cautionIconLabel.setToolTipText("Click here to Learn More");
         cautionIconLabel.setBounds(120, 630, 35, 35);
         add(cautionIconLabel);
+
+        cautionIconLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                String message = "Browser Automation Instructions:\n\n" +
+                        "Please select an account from the above account selection.\n" +
+                        "1) If an account is not selected, it will load the MBNA online site and will not auto-login.\n" +
+                        "2) For the very first time, it takes 7-10 seconds to download the Selenium driver.\n" +
+                        "3) Subsequent attempts will take less than 3 seconds to start automation.";
+                JOptionPane.showMessageDialog(null, message, "Information", JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
 
 // Dropdown for website selection
         websiteComboBox = new JComboBox<>(new String[]{"Google", "Facebook", "YouTube"});
@@ -270,21 +306,28 @@ public class AccountSelectionGUI extends JFrame {
                 chromeLoadingLabel.setVisible(true);
 
                 Timer timer = new Timer(500, evt -> {
-                    // Initialize BrowserHelper with Chrome
-                    browserHelper = new BrowserHelper(BrowserHelper.BrowserType.CHROME);
-                    String selectedSite = (String) websiteComboBox.getSelectedItem();
-                    if (selectedSite != null) {
-                        String url = getUrlForSite(selectedSite);
-                        browserHelper.launchWebsite(url);
-                        browserHelper.inputCredentials(usernameField.getText(), passwordField.getText());
+                    try {
+                        // Initialize BrowserHelper with Chrome
+                        browserHelper = new BrowserHelper(BrowserHelper.BrowserType.CHROME);
+                        String selectedSite = (String) websiteComboBox.getSelectedItem();
+                        if (selectedSite != null) {
+                            String url = getUrlForSite(selectedSite);
+                            boolean launchSuccess = browserHelper.launchWebsite(url);
+                            System.out.println("Launch Success: " + launchSuccess);
+                            if (!launchSuccess) {
+                                JOptionPane.showMessageDialog(null, "Failed to launch browser. Aborting.", "Error", JOptionPane.ERROR_MESSAGE);
+                                return; // Stop execution if browser launch fails
+                            }
+                            browserHelper.inputCredentials(usernameField.getText(), passwordField.getText());
+                        }
+                    } finally {
+                        // Hide loading icon and label
+                        chromeLoadingIconLabel.setVisible(false);
+                        chromeLoadingLabel.setVisible(false);
+                        isChromeLoading = false;  // Reset loading flag
+
+                        ((Timer) evt.getSource()).stop();  // Stop the timer after executing
                     }
-
-                    // Hide loading icon and label
-                    chromeLoadingIconLabel.setVisible(false);
-                    chromeLoadingLabel.setVisible(false);
-                    isChromeLoading = false;  // Reset loading flag
-
-                    ((Timer) evt.getSource()).stop();  // Stop the timer after executing
                 });
 
                 timer.setRepeats(false);  // Ensure the timer only runs once
@@ -331,7 +374,7 @@ public class AccountSelectionGUI extends JFrame {
             }
         });
 
-        add(safariIconLabel);
+        //add(safariIconLabel);
 
 
         submitButton.addActionListener(e -> {
@@ -483,6 +526,12 @@ public class AccountSelectionGUI extends JFrame {
             default:
                 return "";
         }
+    }
+
+    private void copyToClipboard(String text) {
+        StringSelection stringSelection = new StringSelection(text);
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        clipboard.setContents(stringSelection, null);
     }
 
     private void goBackToMainApp() {

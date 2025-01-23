@@ -18,22 +18,26 @@ public class ExcelUtil {
             for (Row row : sheet) {
                 if (row.getRowNum() == 0) continue; // Skip header row
 
-                // Read cell values
-                String accountSet = row.getCell(0).getStringCellValue();
-                String username = row.getCell(1).getStringCellValue();
-                String password = row.getCell(2).getStringCellValue();
-                String holder = row.getCell(3).getStringCellValue();
-                String type = row.getCell(4).getStringCellValue();
-                String transfer = row.getCell(5).getStringCellValue();
-                String offers = row.getCell(6).getStringCellValue();
-                String paymentPlan = row.getCell(7).getStringCellValue();
-                String creditLimit =row.getCell(8).getStringCellValue();
+                // Read cell values with null checks
+                String accountSet = getCellValue(row.getCell(0));
+                String username = getCellValue(row.getCell(1));
+                String password = getCellValue(row.getCell(2));
+                String holder = getCellValue(row.getCell(3));
+                String type = getCellValue(row.getCell(4));
+                String transfer = getCellValue(row.getCell(5));
+                String offers = getCellValue(row.getCell(6));
+                String paymentPlan = getCellValue(row.getCell(7));
+                String creditLimit = getCellValue(row.getCell(8));
 
                 // Store in map with account set as key
-                accounts.put(accountSet, new String[]{username, password, holder, type, transfer, offers, paymentPlan,creditLimit});
+                accounts.put(accountSet, new String[]{username, password, holder, type, transfer, offers, paymentPlan, creditLimit});
             }
         }
 
         return accounts;
+    }
+
+    private static String getCellValue(Cell cell) {
+        return cell == null ? "" : cell.getStringCellValue();
     }
 }

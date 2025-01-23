@@ -6,7 +6,10 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.safari.SafariDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.time.Duration;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -55,23 +58,29 @@ public class BrowserHelper {
     }
 
     // Method to launch a website
-    public void launchWebsite(String url) {
-        if (driver != null) {
-          //  logger.info("Launching website: " + url);
-            long startTime = System.currentTimeMillis();
+public boolean launchWebsite(String url) {
+    if (driver != null) {
+        try {
             driver.get(url);
-            long endTime = System.currentTimeMillis();
-          //  logger.info("Website launched: " + url + " in " + (endTime - startTime) + " ms");
-        } else {
-         //   logger.warning("WebDriver is not initialized.");
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+            WebElement usernameField = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@name ='email']"))); // Adjust locator as needed);
+            return true; // Return true if the website is launched successfully
+        } catch (Exception e) {
+               return false; // Return false if there is an exception
         }
+    } else {
+        // logger.warning("WebDriver is not initialized.");
+        return false; // Return false if the WebDriver is not initialized
     }
+}
 
     public void inputCredentials(String username, String password) {
         try {
             //logger.info("Entering credentials.");
             long startTime = System.currentTimeMillis();
-            WebElement usernameField = driver.findElement(By.xpath("//input[@name ='email']")); // Adjust locator as needed
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+            WebElement usernameField = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@name ='email']"))); // Adjust locator as needed);
+           // WebElement usernameField = driver.findElement(By.xpath("//input[@name ='emaill']")); // Adjust locator as needed
             WebElement passwordField = driver.findElement(By.xpath("//input[@name ='pass']")); // Adjust locator as needed
             usernameField.click();
             usernameField.sendKeys(username);

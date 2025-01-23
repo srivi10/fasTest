@@ -233,7 +233,12 @@ git add "$VERSION_FILE"
 echo "Version updated to $new_version"
 
 Press ctrl+O to save and Ctrl+X to exit
+// unzip jar file command
 
+unzip /Users/srivi/IdeaProjects/ProfitCalculator/out/artifacts/ProfitCalculator_jar/fasTest-1.1.2.jar -d/Users/srivi/Downloads/FastestBuild
+
+//How to re convert to jar file
+zip -r ../FastestBuild.jar *
 
 // Steps to run shell script
 Now navigate to intellij terminal from the root directory run this

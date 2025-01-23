@@ -111,11 +111,12 @@ public class iOSScreenRecordingView extends JFrame {
         JLabel tipIconLabel = new JLabel(new ImageIcon(scaledTipIcon));
 
 // Set specific coordinates for the icon
-        tipIconLabel.setBounds(5, 225, 50, 50); // X=50, Y=220, width=20, height=20
+        tipIconLabel.setBounds(5, 230, 50, 50); // X=50, Y=220, width=20, height=20
         recordingFrame.add(tipIconLabel); // Add icon to the frame
 
 // Create the JTextArea
-        JTextArea infoTextArea = new JTextArea("Use custom file name to avoid overwriting existing files and ensure your recordings are stored for future reference.");
+        JTextArea infoTextArea = new JTextArea("1. Use a custom file name to avoid overwriting existing files and ensure your recordings are stored for future reference.\n" +
+                "2. On iOS For optimized file reduction, open the recorded video in QuickTime (File -> Export As -> 420p).");
         infoTextArea.setFont(interFont);
         infoTextArea.setEditable(false);  // Make it non-editable
         infoTextArea.setLineWrap(true);  // Allow wrapping of text
@@ -124,7 +125,7 @@ public class iOSScreenRecordingView extends JFrame {
         infoTextArea.setBackground(UIManager.getColor("Panel.background"));  // Set default background color
 
 // Set specific coordinates for the text area
-        infoTextArea.setBounds(50, 235, 420, 50); // X=80, Y=220 (next to the icon), width=370, height=50
+        infoTextArea.setBounds(50, 225, 420, 70); // X=80, Y=220 (next to the icon), width=370, height=50
         recordingFrame.add(infoTextArea); // Add text area to the frame
 
         recordingFrame.setVisible(true);
