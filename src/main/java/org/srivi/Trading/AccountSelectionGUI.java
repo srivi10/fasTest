@@ -159,10 +159,26 @@ public class AccountSelectionGUI extends JFrame {
         // Add copy icon next to Username field
         JLabel usernameCopyLabel = createIconLabel("/icons/CopyIcon.png");
         usernameCopyLabel.setToolTipText("Copy Username to Clipboard");
+
+        ImageIcon usernameTickIcon = new ImageIcon(getClass().getResource("/icons/TickIcon.png"));
+        Image usernameScaledTickImage = usernameTickIcon.getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH);
+        JLabel usernameTickIconLabel = new JLabel(new ImageIcon(usernameScaledTickImage));
+        usernameTickIconLabel.setBounds(420, 300, 30, 30); // Adjust bounds as needed
+        usernameTickIconLabel.setVisible(false);
+        add(usernameTickIconLabel);
+
         usernameCopyLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 copyToClipboard(usernameField.getText());
+                usernameTickIconLabel.setVisible(true);
+
+                Timer timer = new Timer(1000, evt -> {
+                    usernameTickIconLabel.setVisible(false);
+                    repaint();
+                });
+                timer.setRepeats(false);
+                timer.start();
             }
         });
         add(usernameCopyLabel).setBounds(390, 300, 30, 30); // Adjust bounds as needed
@@ -170,10 +186,26 @@ public class AccountSelectionGUI extends JFrame {
         
         JLabel passwordCopyLabel = createIconLabel("/icons/CopyIcon.png");
         passwordCopyLabel.setToolTipText("Copy Password to Clipboard");
+
+        ImageIcon passwordTickIcon = new ImageIcon(getClass().getResource("/icons/TickIcon.png"));
+        Image passwordScaledTickImage = usernameTickIcon.getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH);
+        JLabel passwwordTickIconLabel = new JLabel(new ImageIcon(usernameScaledTickImage));
+        passwwordTickIconLabel.setBounds(420, 340, 30, 30); // Adjust bounds as needed
+        passwwordTickIconLabel.setVisible(false);
+        add(passwwordTickIconLabel);
+
         passwordCopyLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 copyToClipboard(passwordField.getText());
+                passwwordTickIconLabel.setVisible(true);
+
+                Timer timer = new Timer(1000, evt -> {
+                    passwwordTickIconLabel.setVisible(false);
+                    repaint();
+                });
+                timer.setRepeats(false);
+                timer.start();
             }
         });
         add(passwordCopyLabel).setBounds(390, 340, 30, 30); // Adjust bounds as needed
